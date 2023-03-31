@@ -7,14 +7,14 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EmailService } from '../../../../../common/helpers/email/email.service';
 import { UserRepository } from '../../../../../bd/user/infrastructure/user.repository';
 
-export class createUserCommand {
+export class CreateUserCommand {
     constructor(public inputModel: CreateUserInputModelType) {}
 }
 
-@CommandHandler(createUserCommand)
-export class createUserUseCase implements ICommandHandler<createUserCommand> {
+@CommandHandler(CreateUserCommand)
+export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
     constructor(protected emailService: EmailService, protected usersRepository: UserRepository) {}
-    async execute(command: createUserCommand) {
+    async execute(command: CreateUserCommand) {
         const passwordHash = await this._generateHash(command.inputModel.password);
         const newUser = {
             accountData: {

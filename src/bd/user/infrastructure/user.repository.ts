@@ -7,6 +7,10 @@ import { User, UserDocument } from '../entities/user.schema';
 export class UserRepository {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
+    async findOneByEmail(email: string) {
+        return this.userModel.findOne({ 'accountData.email': email }, { 'accountData.email': 1, 'accountData.id': 1, 'accountData.password': 1 });
+    }
+
     async createUser(newUser): Promise<User | null> {
         try {
             return this.userModel.create(newUser);
