@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { ErrorExceptionFilter, HttpExceptionFilter } from './exception-filter';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
+import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -32,6 +33,19 @@ async function bootstrap() {
     );
     app.useGlobalFilters(new ErrorExceptionFilter(), new HttpExceptionFilter());
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+    const swaggerConfig = new DocumentBuilder()
+        .setTitle('Inctagram API')
+        .setDescription('Powerfull team should use this api to develop the best Inctagramm app')
+        .setVersion('02_week')
+        .addTag('API')
+        .build();
+
+    const swaggerDoc = SwaggerModule.createDocument(app, swaggerConfig);
+
+    SwaggerModule.setup('api', app, swaggerDoc );
+
+
     await app.listen(5000);
 }
 bootstrap();
