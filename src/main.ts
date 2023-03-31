@@ -5,11 +5,14 @@ import { ErrorExceptionFilter, HttpExceptionFilter } from './exception-filter';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+<<<<<<< HEAD
 // core
 import { createWriteStream } from 'fs';
 import { get } from 'http';
 
 const serverUrl = 'http://localhost:5000';
+=======
+>>>>>>> df94d58 (add 1) login flow 2) session schema 3) jwt service 4) postman collection)
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -48,7 +51,11 @@ async function bootstrap() {
 
     const swaggerDoc = SwaggerModule.createDocument(app, swaggerConfig);
 
+<<<<<<< HEAD
     SwaggerModule.setup('swagger', app, swaggerDoc);
+=======
+    SwaggerModule.setup('api', app, swaggerDoc);
+>>>>>>> df94d58 (add 1) login flow 2) session schema 3) jwt service 4) postman collection)
 
     await app.listen(5000);
 
