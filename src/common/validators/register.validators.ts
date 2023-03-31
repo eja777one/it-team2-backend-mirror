@@ -6,7 +6,7 @@ import { User, UserDocument } from '../../bd/user/entities/user.schema';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
-export class IsLoginInDB implements ValidatorConstraintInterface {
+export class IsLoginInDBValidator implements ValidatorConstraintInterface {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
     async validate(login: string) {
         try {
@@ -27,7 +27,7 @@ export class IsLoginInDB implements ValidatorConstraintInterface {
 
 @Injectable()
 @ValidatorConstraint({ async: true })
-export class IsEmailInInDB implements ValidatorConstraintInterface {
+export class IsEmailInInDBValidator implements ValidatorConstraintInterface {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
     async validate(email: string) {
         try {

@@ -8,18 +8,20 @@ import { getMailConfig } from './common/helpers/email/mail.config';
 import { User, UserSchema } from './bd/user/entities/user.schema';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { IsEmailInInDB, IsLoginInDB } from './common/validators/register.validators';
+import { IsEmailInInDBValidator, IsLoginInDBValidator } from './common/validators/register.validators';
 import { createUserUseCase } from './api/super-admin/user/application/useCases/createUser.UseCase';
 import { UserRepository } from './bd/user/infrastructure/user.repository';
 import { EmailService } from './common/helpers/email/email.service';
 import { AuthController } from './api/public/auth/api/auth.controller';
 import { CqrsModule } from '@nestjs/cqrs';
+import { ResendEmailValidator } from './common/validators/resendEmailValidator';
+import { resentEmailUseCase } from './api/public/auth/application/useCases/resentEmail.useCase';
 
 const controller = [AppController, AuthController];
 const service = [AppService, EmailService];
 const repository = [UserRepository];
-const validators = [IsLoginInDB, IsEmailInInDB];
-const useCases = [createUserUseCase];
+const validators = [IsLoginInDBValidator, IsEmailInInDBValidator, ResendEmailValidator];
+const useCases = [createUserUseCase, resentEmailUseCase];
 
 @Module({
     imports: [

@@ -14,4 +14,8 @@ export class UserRepository {
             return null;
         }
     }
+    async updateUserConfirmationCodeByEmail(email: string, newConfirmationCode: string) {
+        const result = await this.userModel.updateOne({ 'accountData.email': email }, { $set: { 'emailConfirmation.confirmationCode': newConfirmationCode } });
+        return result.matchedCount === 1;
+    }
 }

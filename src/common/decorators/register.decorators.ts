@@ -1,5 +1,5 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { IsEmailInInDB, IsLoginInDB } from '../validators/register.validators';
+import { IsEmailInInDBValidator, IsLoginInDBValidator } from '../validators/register.validators';
 
 export function IsLoginInDb(validationOptions?: ValidationOptions) {
     return function (object: any, propertyName: string) {
@@ -7,7 +7,7 @@ export function IsLoginInDb(validationOptions?: ValidationOptions) {
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
-            validator: IsLoginInDB,
+            validator: IsLoginInDBValidator,
         });
     };
 }
@@ -17,7 +17,7 @@ export function IsEmailInDb(validationOptions?: ValidationOptions) {
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
-            validator: IsEmailInInDB,
+            validator: IsEmailInInDBValidator,
         });
     };
 }
