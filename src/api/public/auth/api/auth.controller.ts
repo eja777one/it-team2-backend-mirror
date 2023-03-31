@@ -1,17 +1,23 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { CreateUserInputModelType } from '../../../super-admin/user/dto/user.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { createUserCommand } from '../../../super-admin/user/application/useCases/createUser.UseCase';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { EmailInputModelType } from '../dto/emailResent.dto';
 import { resentEmailCommand } from '../application/useCases/resentEmail.useCase';
-import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {sw_registrationEmailResending, sw_regitstration} from "./auth.swagger.info";
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { sw_registrationEmailResending, sw_regitstration } from './auth.swagger.info';
+import { LocalAuthGuard } from '../../../../common/guard/local.auth.guard';
+import { JwtAdapter } from '../../../../common/helpers/jwt/jwt.adapter';
+import { CurrentUser } from '../../../../common/decorators/current.user.decorator';
+import { CurrentUserId } from '../../../../common/types/currentUserId';
+import { Response } from 'express';
+import { createSessionCommand } from '../application/useCases/create.session.useCase';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private commandBus: CommandBus) {}
+    constructor(private commandBus: CommandBus, private jwtAdapter: JwtAdapter) {}
 
     @UseGuards(ThrottlerGuard)
     @HttpCode(204)
@@ -33,5 +39,22 @@ export class AuthController {
     @ApiBody(sw_registrationEmailResending.inputSchema)
     async registrationEmailResending(@Body() inputModel: EmailInputModelType) {
         return this.commandBus.execute(new resentEmailCommand(inputModel));
+    }
+
+    @UseGuards(ThrottlerGuard)
+    @UseGuards(LocalAuthGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('login')
+    async login(@CurrentUser() userId: CurrentUserId, @Res({ passthrough: true }) response: Response) {
+        const sessionId = await this.commandBus.execute(new createSessionCommand(userId));
+
+        const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(userId, sessionId);
+
+        response.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+        });
+
+        return { accessToken: accessToken };
     }
 }

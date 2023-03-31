@@ -16,12 +16,20 @@ import { AuthController } from './api/public/auth/api/auth.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ResendEmailValidator } from './common/validators/resendEmailValidator';
 import { resentEmailUseCase } from './api/public/auth/application/useCases/resentEmail.useCase';
+import { AuthService } from './api/public/auth/application/auth.service';
+import { LocalStrategy } from './common/strategy/local.strategy';
+import { JwtAdapter } from './common/helpers/jwt/jwt.adapter';
+import { createSessionUseCase } from './api/public/auth/application/useCases/create.session.useCase';
+import { Session, SessionSchema } from './bd/user/entities/session.schema';
+import { SessionRepository } from './bd/user/infrastructure/session.repository';
+import { JwtService } from '@nestjs/jwt';
 
 const controller = [AppController, AuthController];
-const service = [AppService, EmailService];
-const repository = [UserRepository];
+const service = [AppService, EmailService, AuthService, JwtAdapter, JwtService];
+const repository = [UserRepository, SessionRepository];
 const validators = [IsLoginInDBValidator, IsEmailInInDBValidator, ResendEmailValidator];
-const useCases = [createUserUseCase, resentEmailUseCase];
+const useCases = [createUserUseCase, resentEmailUseCase, createSessionUseCase];
+const strategy = [LocalStrategy];
 
 @Module({
     imports: [
@@ -37,9 +45,12 @@ const useCases = [createUserUseCase, resentEmailUseCase];
         }),
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRoot(process.env.MONGO_URI),
-        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+        MongooseModule.forFeature([
+            { name: User.name, schema: UserSchema },
+            { name: Session.name, schema: SessionSchema },
+        ]),
     ],
     controllers: [...controller],
-    providers: [...repository, ...service, ...validators, ...useCases],
+    providers: [...repository, ...service, ...validators, ...useCases, ...strategy],
 })
 export class AppModule {}

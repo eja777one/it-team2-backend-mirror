@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { ErrorExceptionFilter, HttpExceptionFilter } from './exception-filter';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
-import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -43,8 +43,7 @@ async function bootstrap() {
 
     const swaggerDoc = SwaggerModule.createDocument(app, swaggerConfig);
 
-    SwaggerModule.setup('api', app, swaggerDoc );
-
+    SwaggerModule.setup('api', app, swaggerDoc);
 
     await app.listen(5000);
 }

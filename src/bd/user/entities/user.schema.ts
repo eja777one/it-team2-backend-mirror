@@ -33,6 +33,12 @@ export class User {
     accountData: AccountData;
     @Prop()
     emailConfirmation: EmailConfirmation;
+
+    isConfirmed: () => boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.methods.isConfirmed = function (): boolean {
+    return this.emailConfirmation.isConfirmed === true;
+};

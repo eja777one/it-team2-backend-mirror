@@ -14,6 +14,15 @@ export class UserRepository {
             return null;
         }
     }
+
+    async getByEmail(email: string): Promise<UserDocument | null> {
+        try {
+            return this.userModel.findOne({ 'accountData.email': email });
+        } catch (e) {
+            return null;
+        }
+    }
+
     async updateUserConfirmationCodeByEmail(email: string, newConfirmationCode: string) {
         const result = await this.userModel.updateOne({ 'accountData.email': email }, { $set: { 'emailConfirmation.confirmationCode': newConfirmationCode } });
         return result.matchedCount === 1;

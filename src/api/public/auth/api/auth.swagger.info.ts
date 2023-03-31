@@ -1,12 +1,12 @@
 export const sw_regitstration = {
-    summary: {summary: 'Registration for users'},
+    summary: { summary: 'Registration for users' },
     status204: {
         status: 204,
-        description: 'Account for user was created'
+        description: 'Account for user was created',
     },
     status400: {
         status: 400,
-        description: 'Data from request are incorrect or unexist'
+        description: 'Data from request are incorrect or unexist',
     },
     inputSchema: {
         schema: {
@@ -16,27 +16,27 @@ export const sw_regitstration = {
                 email: {
                     type: 'string',
                     example: 'powerful@gmail.com',
-                    description: 'it should be valid email'
+                    description: 'it should be valid email',
                 },
                 password: {
                     type: 'string',
                     minLength: 6,
-                    maxLength: 20
-                }
-            }
-        }
-    }
+                    maxLength: 20,
+                },
+            },
+        },
+    },
 };
 
 export const sw_registrationEmailResending = {
-    summary: {summary: 'send confirmation code to user\'s email'},
+    summary: { summary: "send confirmation code to user's email" },
     status204: {
         status: 204,
-        description: 'Email succesfully sent'
+        description: 'Email succesfully sent',
     },
     status400: {
         status: 400,
-        description: 'User\'s emaii is incorrect'
+        description: "User's emaii is incorrect",
     },
     inputSchema: {
         schema: {
@@ -46,9 +46,9 @@ export const sw_registrationEmailResending = {
                 email: {
                     type: 'string',
                     example: 'powerful@gmail.com',
-                    description: 'it should be valid email'
-                }
-            }
-        }
-    }
-}
+                    description: 'it should be valid email',
+                },
+            },
+        },
+    },
+};
