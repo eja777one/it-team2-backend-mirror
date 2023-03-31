@@ -3,7 +3,7 @@ import { CreateUserInputModelType } from '../../../super-admin/user/dto/user.dto
 import { CommandBus } from '@nestjs/cqrs';
 import { createUserCommand } from '../../../super-admin/user/application/useCases/createUser.UseCase';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { EmailInputModelType } from '../dto/login.dto';
+import { EmailInputModelType } from '../dto/emailResent.dto';
 import { resentEmailCommand } from '../application/useCases/resentEmail.useCase';
 
 @Controller('auth')

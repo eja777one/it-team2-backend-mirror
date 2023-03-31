@@ -19,7 +19,7 @@ export class createUserUseCase implements ICommandHandler<createUserCommand> {
         const newUser = {
             accountData: {
                 id: new Date().valueOf().toString(),
-                login: command.inputModel.login,
+                // login: command.inputModel.login,
                 email: command.inputModel.email,
                 password: passwordHash,
                 createdAt: new Date().toISOString(),

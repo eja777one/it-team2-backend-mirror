@@ -1,4 +1,4 @@
-import { EmailInputModelType } from '../../dto/login.dto';
+import { EmailInputModelType } from '../../dto/emailResent.dto';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EmailService } from '../../../../../common/helpers/email/email.service';
 import { randomUUID } from 'crypto';
