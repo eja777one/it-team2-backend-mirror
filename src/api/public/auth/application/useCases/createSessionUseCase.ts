@@ -1,10 +1,9 @@
 import { CommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { add } from 'date-fns';
 import { SessionRepository } from '../../../../../bd/user/infrastructure/session.repository';
 
 export class CreateSessionCommand {
-    constructor(public userId: string) {}
+    constructor(public userId: string, public ip: string, public deviceName: string) {}
 }
 
 @CommandHandler(CreateSessionCommand)
@@ -12,16 +11,9 @@ export class CreateSessionUseCase {
     constructor(private jwtService: JwtService, private sessionsRepository: SessionRepository) {}
 
     async execute(command: CreateSessionCommand): Promise<string> {
-        const date = new Date();
+        const { userId, ip, deviceName } = command;
 
-        const newSession = {
-            id: date.valueOf().toString(),
-            userId: command.userId,
-            issueAt: date.toISOString(),
-            expireAt: add(date, { minutes: +process.env.EXPIRE_REFRESH_JWT }).toISOString(),
-        };
-
-        const session = await this.sessionsRepository.createSession(newSession);
+        const session = await this.sessionsRepository.createOrUpdateSession(userId, ip, deviceName);
 
         return session.id;
     }

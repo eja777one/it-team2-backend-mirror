@@ -10,7 +10,7 @@ export class RemoveSessionUseCase {
     constructor(private sessionsRepository: SessionRepository) {}
 
     async execute(command: RemoveSessionCommand): Promise<boolean> {
-        await this.sessionsRepository.delete(command.sessionId);
+        await this.sessionsRepository.deleteSession(command.sessionId);
         return true;
     }
 }
