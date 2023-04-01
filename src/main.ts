@@ -1,43 +1,16 @@
-import cookieParser from 'cookie-parser';
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { ErrorExceptionFilter, HttpExceptionFilter } from './exception-filter';
-import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // core
 import { createWriteStream } from 'fs';
 import { get } from 'http';
+import { configNestApp } from './config.main';
 
 const serverUrl = 'http://localhost:5000';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    app.use(cookieParser());
-    app.enableCors();
-    app.useGlobalPipes(
-        new ValidationPipe({
-            transform: true,
-            stopAtFirstError: true,
-            exceptionFactory: (errors) => {
-                const errorsForResponse = [];
-
-                errors.forEach((e) => {
-                    //    errorsForResponse.push({ field: e.property });
-                    const constrainsKeys = Object.keys(e.constraints);
-                    constrainsKeys.forEach((cKey) => {
-                        errorsForResponse.push({
-                            message: e.constraints[cKey],
-                            field: e.property,
-                        });
-                    });
-                });
-                throw new BadRequestException(errorsForResponse);
-            },
-        }),
-    );
-    app.useGlobalFilters(new ErrorExceptionFilter(), new HttpExceptionFilter());
-    useContainer(app.select(AppModule), { fallbackOnErrors: true });
+    const baseApp = await NestFactory.create(AppModule);
+    const app = configNestApp(baseApp);
 
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Inctagram API')
