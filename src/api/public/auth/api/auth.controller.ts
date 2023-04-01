@@ -4,7 +4,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../../../super-admin/user/application/useCases/createUser.UseCase';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { EmailInputModelType } from '../dto/emailResent.dto';
-import { resentEmailCommand } from '../application/useCases/resentEmail.useCase';
+import { ResentEmailCommand } from '../application/useCases/resentEmailUseCase';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { sw_login, sw_registrationEmailResending, sw_regitstration } from './auth.swagger.info';
 import { LocalAuthGuard } from '../../../../common/guard/local.auth.guard';
@@ -18,11 +18,17 @@ import { RefreshTokenPayloadType } from '../../../../common/types/jwt.types';
 import { CookieGuard } from '../../../../common/guard/cookie.guard';
 import { UpdateSessionCommand } from '../application/useCases/update.session.useCase';
 import { RemoveSessionCommand } from '../application/useCases/remove.session.userCase';
+import { RegistrationConfirmCommand } from '../application/useCases/registrationConfirm.useCase';
+import { PasswordRecoveryInputModelType } from '../dto/passwordRecovery.dto';
+import { PasswordRecoveryCodeCommand } from '../application/useCases/passwordRecovery.useCase';
+import { AuthService } from '../application/auth.service';
+import { PasswordInputModelType } from '../dto/password.dto';
+import { NewPasswordCommand } from '../application/useCases/newPassword.useCase';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private commandBus: CommandBus, private jwtAdapter: JwtAdapter) {}
+    constructor(private commandBus: CommandBus, private jwtAdapter: JwtAdapter, private authService: AuthService) {}
 
     @UseGuards(ThrottlerGuard)
     @HttpCode(HttpStatus.NO_CONTENT)
@@ -45,11 +51,10 @@ export class AuthController {
     @ApiResponse(sw_registrationEmailResending.status429)
     @ApiBody(sw_registrationEmailResending.inputSchema)
     async registrationEmailResending(@Body() inputModel: EmailInputModelType) {
-        return this.commandBus.execute(new resentEmailCommand(inputModel));
+        return this.commandBus.execute(new ResentEmailCommand(inputModel));
     }
 
-    @UseGuards(ThrottlerGuard)
-    @UseGuards(LocalAuthGuard)
+    @UseGuards(ThrottlerGuard, LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @ApiOperation(sw_login.summary)
@@ -59,11 +64,9 @@ export class AuthController {
     @ApiBody(sw_login.inputSchema)
     async login(@CurrentUser() userId: CurrentUserId, @Res({ passthrough: true }) response: Response) {
         const sessionId = await this.commandBus.execute(new CreateSessionCommand(userId));
-        console.log('asdasdasd');
         const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(userId, sessionId);
-        console.log(accessToken);
         response.cookie('refreshToken', refreshToken, {
-            httpOnly: false,
+            httpOnly: true,
             secure: false,
         });
 
@@ -84,6 +87,30 @@ export class AuthController {
         });
 
         return { accessToken: accessToken };
+    }
+
+    @UseGuards(ThrottlerGuard)
+    @Post('registration-confirmation')
+    @HttpCode(204)
+    async registrationConfirmation(@Body('code') code: string) {
+        await this.commandBus.execute(new RegistrationConfirmCommand(code));
+        return;
+    }
+
+    @UseGuards(ThrottlerGuard)
+    @Post('password-recovery-code')
+    @HttpCode(204)
+    async passwordRecoveryCode(@Body() inputModel: PasswordRecoveryInputModelType) {
+        await this.commandBus.execute(new PasswordRecoveryCodeCommand(inputModel));
+        return;
+    }
+
+    @UseGuards(ThrottlerGuard)
+    @Post('new-password')
+    @HttpCode(204)
+    async newPassword(@Body() inputModel: PasswordInputModelType, @Body('recoveryCode') recoveryCode: string) {
+        await this.commandBus.execute(new NewPasswordCommand(inputModel, recoveryCode));
+        return;
     }
 
     @HttpCode(HttpStatus.NO_CONTENT)

@@ -1,13 +1,13 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { ResendEmailValidator } from '../validators/resendEmail.validator';
+import { PasswordRecoveryValidators } from '../validators/passwordRecovery.validators';
 
-export function ResendEmailValidatorD(validationOptions?: ValidationOptions) {
+export function PasswordRecoveryValidator(validationOptions?: ValidationOptions) {
     return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
-            validator: ResendEmailValidator,
+            validator: PasswordRecoveryValidators,
         });
     };
 }

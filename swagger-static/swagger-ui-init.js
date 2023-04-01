@@ -206,6 +206,68 @@ window.onload = function() {
           ]
         }
       },
+      "/auth/registration-confirmation": {
+        "post": {
+          "operationId": "AuthController_registrationConfirmation",
+          "parameters": [],
+          "responses": {
+            "204": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/password-recovery-code": {
+        "post": {
+          "operationId": "AuthController_passwordRecoveryCode",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordRecoveryInputModelType"
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/new-password": {
+        "post": {
+          "operationId": "AuthController_newPassword",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordInputModelType"
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
       "/auth/logout": {
         "post": {
           "operationId": "AuthController_logout",
@@ -235,7 +297,16 @@ window.onload = function() {
     ],
     "servers": [],
     "components": {
-      "schemas": {}
+      "schemas": {
+        "PasswordRecoveryInputModelType": {
+          "type": "object",
+          "properties": {}
+        },
+        "PasswordInputModelType": {
+          "type": "object",
+          "properties": {}
+        }
+      }
     }
   },
   "customOptions": {}
