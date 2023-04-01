@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from '../../../../bd/user/infrastructure/user.repository';
 import bcrypt from 'bcrypt';
 
@@ -7,7 +7,7 @@ export class AuthService {
     constructor(private usersRepository: UserRepository) {}
 
     async validateUser(email: string, password: string): Promise<string> {
-        const user = await this.usersRepository.getByEmail(email);
+        const user = await this.usersRepository.getUserByEmail(email);
         if (!user) throw new UnauthorizedException();
 
         if (!user.isConfirmed()) throw new UnauthorizedException();

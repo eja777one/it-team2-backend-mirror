@@ -5,14 +5,14 @@ import { randomUUID } from 'crypto';
 import { UserRepository } from '../../../../../bd/user/infrastructure/user.repository';
 import { BadRequestException } from '@nestjs/common';
 
-export class resentEmailCommand {
+export class ResentEmailCommand {
     constructor(public inputModel: EmailInputModelType) {}
 }
 
-@CommandHandler(resentEmailCommand)
-export class resentEmailUseCase implements ICommandHandler<resentEmailCommand> {
+@CommandHandler(ResentEmailCommand)
+export class ResentEmailUseCase implements ICommandHandler<ResentEmailCommand> {
     constructor(protected emailService: EmailService, protected usersRepository: UserRepository) {}
-    async execute(command: resentEmailCommand) {
+    async execute(command: ResentEmailCommand) {
         const newConfirmationCode = randomUUID();
         const updateUserConfirmCodeByEmail = await this.usersRepository.updateUserConfirmationCodeByEmail(command.inputModel.email, newConfirmationCode);
         if (updateUserConfirmCodeByEmail) {

@@ -14,8 +14,8 @@ import { UserRepository } from './bd/user/infrastructure/user.repository';
 import { EmailService } from './common/helpers/email/email.service';
 import { AuthController } from './api/public/auth/api/auth.controller';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ResendEmailValidator } from './common/validators/resendEmailValidator';
-import { resentEmailUseCase } from './api/public/auth/application/useCases/resentEmail.useCase';
+import { ResendEmailValidator } from './common/validators/resendEmail.validator';
+import { ResentEmailUseCase } from './api/public/auth/application/useCases/resentEmailUseCase';
 import { AuthService } from './api/public/auth/application/auth.service';
 import { LocalStrategy } from './common/strategy/local.strategy';
 import { JwtAdapter } from './common/helpers/jwt/jwt.adapter';
@@ -27,12 +27,27 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UpdateSessionUseCase } from './api/public/auth/application/useCases/update.session.useCase';
 import { RemoveSessionUseCase } from './api/public/auth/application/useCases/remove.session.userCase';
+import { NewPasswordUseCase } from './api/public/auth/application/useCases/newPassword.useCase';
+import { RegistrationConfirmUseCase } from './api/public/auth/application/useCases/registrationConfirm.useCase';
+import { PasswordRecoveryValidators } from './common/validators/passwordRecovery.validators';
+import { PasswordRecoveryCodeUseCase } from './api/public/auth/application/useCases/passwordRecovery.useCase';
 
 const controller = [AppController, AuthController];
 const service = [AppService, EmailService, AuthService, JwtAdapter, JwtService];
 const repository = [UserRepository, SessionRepository];
-const validators = [IsLoginInDBValidator, IsEmailInInDBValidator, ResendEmailValidator];
-const useCases = [createUserUseCase, resentEmailUseCase, CreateSessionUseCase, UpdateSessionUseCase, RemoveSessionUseCase];
+const validators = [IsLoginInDBValidator, IsEmailInInDBValidator, ResendEmailValidator, PasswordRecoveryValidators, PasswordRecoveryValidators];
+const useCases = [
+    createUserUseCase,
+    ResentEmailUseCase,
+    CreateSessionUseCase,
+    UpdateSessionUseCase,
+    RemoveSessionUseCase,
+    ResentEmailUseCase,
+    NewPasswordUseCase,
+    RegistrationConfirmUseCase,
+    ResentEmailUseCase,
+    PasswordRecoveryCodeUseCase,
+];
 const strategy = [LocalStrategy];
 
 @Module({
