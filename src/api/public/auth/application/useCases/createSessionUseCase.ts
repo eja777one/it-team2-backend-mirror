@@ -18,7 +18,7 @@ export class CreateSessionUseCase {
             id: date.valueOf().toString(),
             userId: command.userId,
             issueAt: date.toISOString(),
-            expireAt: add(date, { hours: +process.env.EXPIRE_REFRESH_JWT }),
+            expireAt: add(date, { minutes: +process.env.EXPIRE_REFRESH_JWT }).toISOString(),
         };
 
         const session = await this.sessionsRepository.createSession(newSession);

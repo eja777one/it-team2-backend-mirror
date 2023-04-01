@@ -13,6 +13,11 @@ import { CurrentUser } from '../../../../common/decorators/current.user.decorato
 import { CurrentUserId } from '../../../../common/types/currentUserId';
 import { Response } from 'express';
 import { CreateSessionCommand } from '../application/useCases/createSessionUseCase';
+import { PayloadFromRefreshToken } from '../../../../common/decorators/payload.token.decorator';
+import { RefreshTokenPayloadType } from '../../../../common/types/jwt.types';
+import { CookieGuard } from '../../../../common/guard/cookie.guard';
+import { UpdateSessionCommand } from '../application/useCases/update.session.useCase';
+import { RemoveSessionCommand } from '../application/useCases/remove.session.userCase';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -63,5 +68,30 @@ export class AuthController {
         });
 
         return { accessToken: accessToken };
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(CookieGuard)
+    @Post('refresh-token')
+    async refreshToken(@PayloadFromRefreshToken() payload: RefreshTokenPayloadType, @Res({ passthrough: true }) response: Response) {
+        await this.commandBus.execute(new UpdateSessionCommand(payload.sessionId));
+
+        const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(payload.userId, payload.sessionId);
+
+        response.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+        });
+
+        return { accessToken: accessToken };
+    }
+
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @UseGuards(CookieGuard)
+    @Post('logout')
+    async logout(@PayloadFromRefreshToken() payload: RefreshTokenPayloadType, @Res({ passthrough: true }) response: Response) {
+        await this.commandBus.execute(new RemoveSessionCommand(payload.sessionId));
+        response.clearCookie('refreshToken');
+        return;
     }
 }

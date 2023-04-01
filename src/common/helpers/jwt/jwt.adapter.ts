@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Tokens } from './jwt.types';
+import { RefreshTokenPayloadType, Tokens } from '../../types/jwt.types';
 
 @Injectable()
 export class JwtAdapter {
@@ -14,12 +14,29 @@ export class JwtAdapter {
             refreshToken: refreshToken,
         };
     }
+    checkExpirationRefreshToken(token: string): boolean {
+        try {
+            this.jwtService.verify(token, {
+                secret: process.env.JWT_REFRESH_SECRET,
+            });
+            return true;
+        } catch {
+            return false;
+        }
+    }
+    getRefreshTokenPayload(refreshToken: string): RefreshTokenPayloadType | null {
+        try {
+            return this.jwtService.decode(refreshToken) as RefreshTokenPayloadType;
+        } catch {
+            return null;
+        }
+    }
     private createJWT(userId: string): string {
         return this.jwtService.sign(
             { userId: userId },
             {
                 secret: process.env.JWT_ACCESS_SECRET,
-                expiresIn: process.env.EXPIRE_ACCESS_JWT,
+                expiresIn: process.env.EXPIRE_ACCESS_JWT + 'm',
             },
         );
     }
@@ -28,7 +45,7 @@ export class JwtAdapter {
             { userId: userId, sessionId: sessionId },
             {
                 secret: process.env.JWT_REFRESH_SECRET,
-                expiresIn: process.env.EXPIRE_REFRESH_JWT,
+                expiresIn: process.env.EXPIRE_REFRESH_JWT + 'm',
             },
         );
     }
