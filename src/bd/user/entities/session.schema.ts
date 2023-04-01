@@ -6,14 +6,18 @@ export type SessionDocument = HydratedDocument<Session>;
 
 @Schema()
 export class Session {
-    @Prop()
+    @Prop({ required: true })
     id: string;
-    @Prop()
+    @Prop({ required: true })
     userId: string;
-    @Prop()
+    @Prop({ required: true })
     issueAt: string;
-    @Prop()
+    @Prop({ required: true })
     expireAt: string;
+    @Prop({ required: true })
+    deviceName: string;
+    @Prop({ required: true })
+    ip: string;
 
     updateDate: () => boolean;
 }

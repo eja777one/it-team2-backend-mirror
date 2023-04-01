@@ -154,7 +154,16 @@ window.onload = function() {
         "post": {
           "operationId": "AuthController_login",
           "summary": "User can login and do something into app",
-          "parameters": [],
+          "parameters": [
+            {
+              "name": "user-agent",
+              "required": true,
+              "in": "header",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
           "requestBody": {
             "required": true,
             "content": {

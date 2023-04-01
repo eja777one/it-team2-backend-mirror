@@ -13,7 +13,7 @@ export class UpdateSessionUseCase {
     async execute(command: UpdateSessionCommand): Promise<boolean> {
         const session = await this.sessionsRepository.getBySessionId(command.sessionId);
         session.updateDate();
-        await this.sessionsRepository.save(session);
+        await this.sessionsRepository.saveSession(session);
 
         return true;
     }

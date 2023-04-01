@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Ip, Post, Res, UseGuards, Headers } from '@nestjs/common';
 import { CreateUserInputModelType } from '../../../super-admin/user/dto/user.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../../../super-admin/user/application/useCases/createUser.UseCase';
@@ -62,9 +62,17 @@ export class AuthController {
     @ApiResponse(sw_login.status401)
     @ApiResponse(sw_login.status429)
     @ApiBody(sw_login.inputSchema)
-    async login(@CurrentUser() userId: CurrentUserId, @Res({ passthrough: true }) response: Response) {
-        const sessionId = await this.commandBus.execute(new CreateSessionCommand(userId));
+    async login(
+        @Ip() ip: string,
+        @Headers('user-agent')
+        deviceName: string,
+        @CurrentUser() userId: CurrentUserId,
+        @Res({ passthrough: true }) response: Response,
+    ) {
+        const sessionId = await this.commandBus.execute(new CreateSessionCommand(userId, ip, deviceName));
+
         const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(userId, sessionId);
+
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
