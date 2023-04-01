@@ -12,7 +12,7 @@ export class EmailService {
                 subject: subject,
                 html: `<h1>Thank for your registration</h1>
                         <p>To finish registration please follow the link below:
-                             <a href='https://somesite.com/confirm-email?code=${confirmationCode}'>complete registration</a>
+                             <a href='${confirmationCode}'>complete registration</a>
                         </p>`,
             });
         } catch (e) {
@@ -28,7 +28,7 @@ export class EmailService {
                 subject: subject,
                 html: `<h1>Thank for your registration</h1>
                         <p>To finish registration please follow the link below:
-                                 <a href='https://somesite.com/confirm-email?code=${NewRecoveryCode}'>recovery password</a>
+                                 <a href='${NewRecoveryCode}'>recovery password</a>
                         </p>`,
             });
         } catch (e) {
