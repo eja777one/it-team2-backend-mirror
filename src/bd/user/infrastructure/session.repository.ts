@@ -14,4 +14,14 @@ export class SessionRepository {
             return null;
         }
     }
+    async getBySessionId(sessionId: string): Promise<SessionDocument | null> {
+        try {
+            return this.sessionModel.findOne({ id: sessionId });
+        } catch (e) {
+            return null;
+        }
+    }
+    async save(session: SessionDocument): Promise<SessionDocument> {
+        return session.save();
+    }
 }

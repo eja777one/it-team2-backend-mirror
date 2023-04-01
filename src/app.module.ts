@@ -25,12 +25,13 @@ import { SessionRepository } from './bd/user/infrastructure/session.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { UpdateSessionUseCase } from './api/public/auth/application/useCases/update.session.useCase';
 
 const controller = [AppController, AuthController];
 const service = [AppService, EmailService, AuthService, JwtAdapter, JwtService];
 const repository = [UserRepository, SessionRepository];
 const validators = [IsLoginInDBValidator, IsEmailInInDBValidator, ResendEmailValidator];
-const useCases = [createUserUseCase, resentEmailUseCase, CreateSessionUseCase];
+const useCases = [createUserUseCase, resentEmailUseCase, CreateSessionUseCase, UpdateSessionUseCase];
 const strategy = [LocalStrategy];
 
 @Module({

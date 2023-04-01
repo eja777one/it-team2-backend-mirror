@@ -13,6 +13,10 @@ import { CurrentUser } from '../../../../common/decorators/current.user.decorato
 import { CurrentUserId } from '../../../../common/types/currentUserId';
 import { Response } from 'express';
 import { CreateSessionCommand } from '../application/useCases/createSessionUseCase';
+import { PayloadFromRefreshToken } from '../../../../common/decorators/payload.token.decorator';
+import { RefreshTokenPayloadType } from '../../../../common/types/jwt.types';
+import { CookieGuard } from '../../../../common/guard/cookie.guard';
+import { UpdateSessionCommand } from '../application/useCases/update.session.useCase';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -59,6 +63,22 @@ export class AuthController {
         console.log(accessToken);
         response.cookie('refreshToken', refreshToken, {
             httpOnly: false,
+            secure: false,
+        });
+
+        return { accessToken: accessToken };
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(CookieGuard)
+    @Post('refresh-token')
+    async refreshToken(@PayloadFromRefreshToken() payload: RefreshTokenPayloadType, @Res({ passthrough: true }) response: Response) {
+        await this.commandBus.execute(new UpdateSessionCommand(payload.sessionId));
+
+        const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(payload.userId, payload.sessionId);
+
+        response.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
             secure: false,
         });
 
