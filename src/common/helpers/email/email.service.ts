@@ -11,7 +11,7 @@ export class EmailService {
                 to: email,
                 subject: subject,
                 html: `<h1>Thank for your registration</h1>
-                        <p>To finish registration please follow the link below:
+                        <p>To finish registration please follow the link below: eto cod => ${confirmationCode} a eto net =>
                              <a href='${confirmationCode}'>complete registration</a>
                         </p>`,
             });
@@ -27,7 +27,7 @@ export class EmailService {
                 to: email,
                 subject: subject,
                 html: `<h1>Thank for your registration</h1>
-                        <p>To finish registration please follow the link below:
+                        <p>To finish registration please follow the link below: eto cod =>  ${NewRecoveryCode} a eto net =>
                                  <a href='${NewRecoveryCode}'>recovery password</a>
                         </p>`,
             });
