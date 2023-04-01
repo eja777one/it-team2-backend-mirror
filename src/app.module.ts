@@ -19,7 +19,7 @@ import { resentEmailUseCase } from './api/public/auth/application/useCases/resen
 import { AuthService } from './api/public/auth/application/auth.service';
 import { LocalStrategy } from './common/strategy/local.strategy';
 import { JwtAdapter } from './common/helpers/jwt/jwt.adapter';
-import { createSessionUseCase } from './api/public/auth/application/useCases/create.session.useCase';
+import { CreateSessionUseCase } from './api/public/auth/application/useCases/createSessionUseCase';
 import { Session, SessionSchema } from './bd/user/entities/session.schema';
 import { SessionRepository } from './bd/user/infrastructure/session.repository';
 import { JwtService } from '@nestjs/jwt';
@@ -30,7 +30,7 @@ const controller = [AppController, AuthController];
 const service = [AppService, EmailService, AuthService, JwtAdapter, JwtService];
 const repository = [UserRepository, SessionRepository];
 const validators = [IsLoginInDBValidator, IsEmailInInDBValidator, ResendEmailValidator];
-const useCases = [createUserUseCase, resentEmailUseCase, createSessionUseCase];
+const useCases = [createUserUseCase, resentEmailUseCase, CreateSessionUseCase];
 const strategy = [LocalStrategy];
 
 @Module({

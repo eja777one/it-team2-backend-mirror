@@ -12,7 +12,7 @@ import { JwtAdapter } from '../../../../common/helpers/jwt/jwt.adapter';
 import { CurrentUser } from '../../../../common/decorators/current.user.decorator';
 import { CurrentUserId } from '../../../../common/types/currentUserId';
 import { Response } from 'express';
-import { createSessionCommand } from '../application/useCases/create.session.useCase';
+import { CreateSessionCommand } from '../application/useCases/createSessionUseCase';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -53,12 +53,12 @@ export class AuthController {
     @ApiResponse(sw_login.status429)
     @ApiBody(sw_login.inputSchema)
     async login(@CurrentUser() userId: CurrentUserId, @Res({ passthrough: true }) response: Response) {
-        const sessionId = await this.commandBus.execute(new createSessionCommand(userId));
-
+        const sessionId = await this.commandBus.execute(new CreateSessionCommand(userId));
+        console.log('asdasdasd');
         const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(userId, sessionId);
-
+        console.log(accessToken);
         response.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
+            httpOnly: false,
             secure: false,
         });
 

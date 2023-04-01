@@ -8,7 +8,7 @@ export class CreateSessionCommand {
 }
 
 @CommandHandler(CreateSessionCommand)
-export class createSessionUseCase {
+export class CreateSessionUseCase {
     constructor(private jwtService: JwtService, private sessionsRepository: SessionRepository) {}
 
     async execute(command: CreateSessionCommand): Promise<string> {
