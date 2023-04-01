@@ -3,15 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { add } from 'date-fns';
 import { SessionRepository } from '../../../../../bd/user/infrastructure/session.repository';
 
-export class createSessionCommand {
+export class CreateSessionCommand {
     constructor(public userId: string) {}
 }
 
-@CommandHandler(createSessionCommand)
+@CommandHandler(CreateSessionCommand)
 export class createSessionUseCase {
     constructor(private jwtService: JwtService, private sessionsRepository: SessionRepository) {}
 
-    async execute(command: createSessionCommand): Promise<string> {
+    async execute(command: CreateSessionCommand): Promise<string> {
         const date = new Date();
 
         const newSession = {
