@@ -17,6 +17,7 @@ import { PayloadFromRefreshToken } from '../../../../common/decorators/payload.t
 import { RefreshTokenPayloadType } from '../../../../common/types/jwt.types';
 import { CookieGuard } from '../../../../common/guard/cookie.guard';
 import { UpdateSessionCommand } from '../application/useCases/update.session.useCase';
+import { RemoveSessionCommand } from '../application/useCases/remove.session.userCase';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -83,5 +84,14 @@ export class AuthController {
         });
 
         return { accessToken: accessToken };
+    }
+
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @UseGuards(CookieGuard)
+    @Post('logout')
+    async logout(@PayloadFromRefreshToken() payload: RefreshTokenPayloadType, @Res({ passthrough: true }) response: Response) {
+        await this.commandBus.execute(new RemoveSessionCommand(payload.sessionId));
+        response.clearCookie('refreshToken');
+        return;
     }
 }

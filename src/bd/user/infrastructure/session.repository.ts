@@ -24,4 +24,12 @@ export class SessionRepository {
     async save(session: SessionDocument): Promise<SessionDocument> {
         return session.save();
     }
+    async delete(sessionId: string): Promise<boolean> {
+        try {
+            await this.sessionModel.findOneAndDelete({ id: sessionId });
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
 }

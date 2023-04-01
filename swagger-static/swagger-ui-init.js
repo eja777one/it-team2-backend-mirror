@@ -205,6 +205,20 @@ window.onload = function() {
             "Auth"
           ]
         }
+      },
+      "/auth/logout": {
+        "post": {
+          "operationId": "AuthController_logout",
+          "parameters": [],
+          "responses": {
+            "204": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
       }
     },
     "info": {
