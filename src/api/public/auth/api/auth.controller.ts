@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { CreateUserInputModelType } from '../../../super-admin/user/dto/user.dto';
 import { CommandBus } from '@nestjs/cqrs';
-import { createUserCommand } from '../../../super-admin/user/application/useCases/createUser.UseCase';
+import { CreateUserCommand } from '../../../super-admin/user/application/useCases/createUser.UseCase';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { EmailInputModelType } from '../dto/emailResent.dto';
 import { resentEmailCommand } from '../application/useCases/resentEmail.useCase';
@@ -14,7 +14,7 @@ export class AuthController {
     @HttpCode(204)
     @Post('registration')
     async registration(@Body() inputModel: CreateUserInputModelType) {
-        return this.commandBus.execute(new createUserCommand(inputModel));
+        return this.commandBus.execute(new CreateUserCommand(inputModel));
     }
 
     @UseGuards(ThrottlerGuard)
