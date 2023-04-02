@@ -6,7 +6,13 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { EmailInputModelType } from '../dto/emailResent.dto';
 import { ResentEmailCommand } from '../application/useCases/resentEmailUseCase';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { sw_login, sw_registrationEmailResending, sw_regitstration } from './auth.swagger.info';
+import {
+    sw_login, sw_logout, sw_newPassword, sw_passwordRecoveryCode,
+    sw_refreshToken,
+    sw_registrationConfirmation,
+    sw_registrationEmailResending,
+    sw_regitstration
+} from './auth.swagger.info';
 import { LocalAuthGuard } from '../../../../common/guard/local.auth.guard';
 import { JwtAdapter } from '../../../../common/helpers/jwt/jwt.adapter';
 import { CurrentUser } from '../../../../common/decorators/current.user.decorator';
@@ -34,10 +40,10 @@ export class AuthController {
     @HttpCode(HttpStatus.NO_CONTENT)
     @Post('registration')
     @ApiOperation(sw_regitstration.summary)
+    @ApiBody(sw_regitstration.inputSchema)
     @ApiResponse(sw_regitstration.status204)
     @ApiResponse(sw_regitstration.status400)
     @ApiResponse(sw_regitstration.status429)
-    @ApiBody(sw_regitstration.inputSchema)
     async registration(@Body() inputModel: CreateUserInputModelType) {
         return this.commandBus.execute(new CreateUserCommand(inputModel));
     }
@@ -46,10 +52,10 @@ export class AuthController {
     @HttpCode(HttpStatus.NO_CONTENT)
     @Post('registration-email-resending')
     @ApiOperation(sw_registrationEmailResending.summary)
+    @ApiBody(sw_registrationEmailResending.inputSchema)
     @ApiResponse(sw_registrationEmailResending.status204)
     @ApiResponse(sw_registrationEmailResending.status400)
     @ApiResponse(sw_registrationEmailResending.status429)
-    @ApiBody(sw_registrationEmailResending.inputSchema)
     async registrationEmailResending(@Body() inputModel: EmailInputModelType) {
         return this.commandBus.execute(new ResentEmailCommand(inputModel));
     }
@@ -58,10 +64,10 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @ApiOperation(sw_login.summary)
+    @ApiBody(sw_login.inputSchema)
     @ApiResponse(sw_login.status200)
     @ApiResponse(sw_login.status401)
     @ApiResponse(sw_login.status429)
-    @ApiBody(sw_login.inputSchema)
     async login(
         @Ip() ip: string,
         @Headers('user-agent')
@@ -81,9 +87,12 @@ export class AuthController {
         return { accessToken: accessToken };
     }
 
-    @HttpCode(HttpStatus.OK)
     @UseGuards(CookieGuard)
+    @HttpCode(HttpStatus.OK)
     @Post('refresh-token')
+    @ApiOperation(sw_refreshToken.summary)
+    @ApiResponse(sw_refreshToken.status200)
+    @ApiResponse(sw_refreshToken.status401)
     async refreshToken(@PayloadFromRefreshToken() payload: RefreshTokenPayloadType, @Res({ passthrough: true }) response: Response) {
         await this.commandBus.execute(new UpdateSessionCommand(payload.sessionId));
 
@@ -98,32 +107,50 @@ export class AuthController {
     }
 
     @UseGuards(ThrottlerGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Post('registration-confirmation')
-    @HttpCode(204)
+    @ApiOperation(sw_registrationConfirmation.summary)
+    @ApiBody(sw_registrationConfirmation.inputSchema)
+    @ApiResponse(sw_registrationConfirmation.status204)
+    @ApiResponse(sw_registrationConfirmation.status400)
+    @ApiResponse(sw_registrationConfirmation.status429)
     async registrationConfirmation(@Body('code') code: string) {
         await this.commandBus.execute(new RegistrationConfirmCommand(code));
         return;
     }
 
     @UseGuards(ThrottlerGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Post('password-recovery-code')
-    @HttpCode(204)
+    @ApiOperation(sw_passwordRecoveryCode.summary)
+    @ApiBody(sw_passwordRecoveryCode.inputSchema)
+    @ApiResponse(sw_passwordRecoveryCode.status204)
+    @ApiResponse(sw_passwordRecoveryCode.status400)
+    @ApiResponse(sw_passwordRecoveryCode.status429)
     async passwordRecoveryCode(@Body() inputModel: PasswordRecoveryInputModelType) {
         await this.commandBus.execute(new PasswordRecoveryCodeCommand(inputModel));
         return;
     }
 
     @UseGuards(ThrottlerGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Post('new-password')
-    @HttpCode(204)
+    @ApiOperation(sw_newPassword.summary)
+    @ApiBody(sw_newPassword.inputSchema)
+    @ApiResponse(sw_newPassword.status204)
+    @ApiResponse(sw_newPassword.status400)
+    @ApiResponse(sw_newPassword.status429)
     async newPassword(@Body() inputModel: PasswordInputModelType, @Body('recoveryCode') recoveryCode: string) {
         await this.commandBus.execute(new NewPasswordCommand(inputModel, recoveryCode));
         return;
     }
 
-    @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(CookieGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Post('logout')
+    @ApiOperation(sw_logout.summary)
+    @ApiResponse(sw_logout.status204)
+    @ApiResponse(sw_logout.status401)
     async logout(@PayloadFromRefreshToken() payload: RefreshTokenPayloadType, @Res({ passthrough: true }) response: Response) {
         await this.commandBus.execute(new RemoveSessionCommand(payload.sessionId));
         response.clearCookie('refreshToken');

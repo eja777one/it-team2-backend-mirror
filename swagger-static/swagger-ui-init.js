@@ -187,7 +187,20 @@ window.onload = function() {
           },
           "responses": {
             "200": {
-              "description": "Successfully login and get tokens"
+              "description": "Successfully login and get tokens. Refresh token sent into secure cookie",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "UserTokenModel",
+                    "type": "object",
+                    "properties": {
+                      "accessToken": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
             },
             "401": {
               "description": "Email or password are incorrect"
@@ -204,10 +217,27 @@ window.onload = function() {
       "/auth/refresh-token": {
         "post": {
           "operationId": "AuthController_refreshToken",
+          "summary": "User can update refresh and access tokens. User should have refresh token",
           "parameters": [],
           "responses": {
             "200": {
-              "description": ""
+              "description": "Tokens was successfully updated and sent to user. Refresh token sent into secure cookie",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "UserTokenModel",
+                    "type": "object",
+                    "properties": {
+                      "accessToken": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Refresh token is un exist or expired"
             }
           },
           "tags": [
@@ -218,10 +248,63 @@ window.onload = function() {
       "/auth/registration-confirmation": {
         "post": {
           "operationId": "AuthController_registrationConfirmation",
+          "summary": "User can activate account by confirmation code",
           "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "CodeConfirmInputModelType",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "f0b00c17-bd4d-4113-b2c4-1a7a29124970",
+                      "description": "it should be code from mail which sent to user"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "responses": {
             "204": {
-              "description": ""
+              "description": "User's account was activated"
+            },
+            "400": {
+              "description": "User is already activated or confirm code is incorrect/expired",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "messages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "incorrect confirmedCode"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "code"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "429": {
+              "description": "More than 5 requests for 10 seconds"
             }
           },
           "tags": [
@@ -232,20 +315,63 @@ window.onload = function() {
       "/auth/password-recovery-code": {
         "post": {
           "operationId": "AuthController_passwordRecoveryCode",
+          "summary": "User can request recovery code to set new password",
           "parameters": [],
           "requestBody": {
             "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PasswordRecoveryInputModelType"
+                  "title": "PasswordRecoveryInputModelType",
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "powerful@gmail.com",
+                      "description": "it should be valid email"
+                    }
+                  }
                 }
               }
             }
           },
           "responses": {
             "204": {
-              "description": ""
+              "description": "Mail with recovery code was sent to user's email"
+            },
+            "400": {
+              "description": "Incorrect email. Maybe user is un exist in app",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "messages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "incorrect email"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "email"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "429": {
+              "description": "More than 5 requests for 10 seconds"
             }
           },
           "tags": [
@@ -256,20 +382,70 @@ window.onload = function() {
       "/auth/new-password": {
         "post": {
           "operationId": "AuthController_newPassword",
+          "summary": "User can set new password. User should have password recovery code",
           "parameters": [],
           "requestBody": {
             "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PasswordInputModelType"
+                  "title": "PasswordInputModelType",
+                  "type": "object",
+                  "properties": {
+                    "newPassword": {
+                      "type": "string",
+                      "example": "newPassword",
+                      "description": "it should be valid password",
+                      "minLength": 6,
+                      "maxLength": 20
+                    },
+                    "recoveryCode": {
+                      "type": "string",
+                      "example": "f0b00c17-bd4d-4113-b2c4-1a7a29124970",
+                      "description": "it should be code from mail which sent to user"
+                    }
+                  }
                 }
               }
             }
           },
           "responses": {
             "204": {
-              "description": ""
+              "description": "New password was set to user"
+            },
+            "400": {
+              "description": "Incorrect recovery code",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "messages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "incorrect recoveryCode"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "recoveryCode"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "429": {
+              "description": "More than 5 requests for 10 seconds"
             }
           },
           "tags": [
@@ -280,14 +456,111 @@ window.onload = function() {
       "/auth/logout": {
         "post": {
           "operationId": "AuthController_logout",
+          "summary": "User can logout. User should have refresh token. User's access and refresh token will be deleted",
           "parameters": [],
           "responses": {
             "204": {
-              "description": ""
+              "description": "User was logout. Tokens was deleted"
+            },
+            "401": {
+              "description": "Refresh token is un exist or expired"
             }
           },
           "tags": [
             "Auth"
+          ]
+        }
+      },
+      "/testing/db-user/{userEmail}": {
+        "get": {
+          "operationId": "TestsController_getUser",
+          "summary": "Get DB user by email",
+          "parameters": [
+            {
+              "name": "userEmail",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Get DB user"
+            },
+            "404": {
+              "description": "User with this email is un exist"
+            }
+          },
+          "tags": [
+            "Testing"
+          ]
+        }
+      },
+      "/testing/db-users": {
+        "get": {
+          "operationId": "TestsController_getUsers",
+          "summary": "Get DB users",
+          "parameters": [
+            {
+              "name": "userEmail",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Get DB users"
+            }
+          },
+          "tags": [
+            "Testing"
+          ]
+        }
+      },
+      "/testing/activate-user/{userEmail}": {
+        "put": {
+          "operationId": "TestsController_activateUser",
+          "summary": "Activate user's account",
+          "parameters": [
+            {
+              "name": "userEmail",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "User's account was activated"
+            },
+            "400": {
+              "description": "User's account is already activated or un exist"
+            }
+          },
+          "tags": [
+            "Testing"
+          ]
+        }
+      },
+      "/testing/all-data": {
+        "delete": {
+          "operationId": "TestsController_deleteAllData",
+          "summary": "Delete all data from DB",
+          "parameters": [],
+          "responses": {
+            "204": {
+              "description": "DB was cleared"
+            }
+          },
+          "tags": [
+            "Testing"
           ]
         }
       }
@@ -306,16 +579,7 @@ window.onload = function() {
     ],
     "servers": [],
     "components": {
-      "schemas": {
-        "PasswordRecoveryInputModelType": {
-          "type": "object",
-          "properties": {}
-        },
-        "PasswordInputModelType": {
-          "type": "object",
-          "properties": {}
-        }
-      }
+      "schemas": {}
     }
   },
   "customOptions": {}

@@ -14,7 +14,7 @@ export class PasswordRecoveryCodeUseCase implements ICommandHandler<PasswordReco
     constructor(protected usersRepository: UserRepository, protected emailService: EmailService) {}
     async execute(command: PasswordRecoveryCodeCommand) {
         const user = await this.usersRepository.getUserByEmail(command.inputModel.email);
-        if (!user) throw new BadRequestException([{ message: 'Incorrect recoveryCode', field: 'recoveryCode' }]);
+        if (!user) throw new BadRequestException([{ message: 'Incorrect email', field: 'email' }]);
         const NewRecoveryCode = randomUUID();
         await this.usersRepository.updateUserRecoveryPasswordCodeByEmail(command.inputModel.email, NewRecoveryCode);
         await this.emailService.sendMailRecoveryPasswordCode(command.inputModel.email, 'RecoveryPassword', NewRecoveryCode);
