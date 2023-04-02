@@ -11,7 +11,7 @@ export class CreateSessionUseCase {
     constructor(private jwtService: JwtService, private sessionsRepository: SessionRepository) {}
 
     async execute(command: CreateSessionCommand): Promise<string> {
-        const { userId, ip, deviceName } = command;
+        const { userId, ip, deviceName = 'unknown' } = command;
 
         const session = await this.sessionsRepository.createOrUpdateSession(userId, ip, deviceName);
 
