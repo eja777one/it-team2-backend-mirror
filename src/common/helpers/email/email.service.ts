@@ -12,7 +12,7 @@ export class EmailService {
                 subject: subject,
                 html: `<h1>Thank for your registration</h1>
                         <p>To finish registration please follow the link below: eto cod => ${confirmationCode} a eto net =>
-                             <a href='${confirmationCode}'>complete registration</a>
+                             <a href='https://instagram-frontend-theta.vercel.app/auth/registration/confirmation?code=${confirmationCode}'>complete registration</a>
                         </p>`,
             });
             return true;
