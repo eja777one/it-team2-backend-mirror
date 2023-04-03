@@ -28,8 +28,8 @@ export class EmailService {
                 to: email,
                 subject: subject,
                 html: `<h1>Thank for your registration</h1>
-                        <p>To finish registration please follow the link below: eto cod =>  ${NewRecoveryCode} a eto net =>
-                                 <a href='${NewRecoveryCode}'>recovery password</a>
+                        <p>To finish recoveryPassword: eto cod =>  ${NewRecoveryCode} a eto net =>
+                                 <a href='https://vercel.com/powerful/instagram-frontend/auth/new-password?code=${NewRecoveryCode}'>recovery password</a>
                         </p>`,
             });
             return true;
