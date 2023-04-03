@@ -15,8 +15,9 @@ export class EmailService {
                              <a href='${confirmationCode}'>complete registration</a>
                         </p>`,
             });
-        } catch (e) {
             return true;
+        } catch (e) {
+            return false;
         }
     }
 
@@ -31,8 +32,9 @@ export class EmailService {
                                  <a href='${NewRecoveryCode}'>recovery password</a>
                         </p>`,
             });
-        } catch (e) {
             return true;
+        } catch (e) {
+            return false;
         }
     }
 }

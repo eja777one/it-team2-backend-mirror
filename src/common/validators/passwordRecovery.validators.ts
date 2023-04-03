@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../../bd/user/entities/user.schema';
@@ -20,6 +20,6 @@ export class PasswordRecoveryValidators implements ValidatorConstraintInterface 
     }
 
     defaultMessage(args: ValidationArguments) {
-        return 'This email confirm';
+        return 'This email not confirm';
     }
 }

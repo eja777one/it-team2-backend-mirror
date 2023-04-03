@@ -31,7 +31,15 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
                 isConfirmed: false,
             },
         };
-        await this.emailService.sendEmail(newUser.accountData.email, 'Registr', newUser.emailConfirmation.confirmationCode);
+        const sendEmail = await this.emailService.sendEmail(newUser.accountData.email, 'Registr', newUser.emailConfirmation.confirmationCode);
+        if (!sendEmail) {
+            throw new BadRequestException([
+                {
+                    message: 'Incorrect Email',
+                    field: 'email',
+                },
+            ]);
+        }
         const result = await this.usersRepository.createUser({ ...newUser });
         if (!result)
             throw new BadRequestException({

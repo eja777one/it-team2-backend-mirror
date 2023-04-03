@@ -7,11 +7,14 @@ import { EmailInputModelType } from '../dto/emailResent.dto';
 import { ResentEmailCommand } from '../application/useCases/resentEmailUseCase';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
-    sw_login, sw_logout, sw_newPassword, sw_passwordRecoveryCode,
+    sw_login,
+    sw_logout,
+    sw_newPassword,
+    sw_passwordRecoveryCode,
     sw_refreshToken,
     sw_registrationConfirmation,
     sw_registrationEmailResending,
-    sw_regitstration
+    sw_regitstration,
 } from './auth.swagger.info';
 import { LocalAuthGuard } from '../../../../common/guard/local.auth.guard';
 import { JwtAdapter } from '../../../../common/helpers/jwt/jwt.adapter';

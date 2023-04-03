@@ -12,8 +12,9 @@ export class RegistrationConfirmUseCase implements ICommandHandler<RegistrationC
     async execute(command: RegistrationConfirmCommand) {
         const user = await this.usersRepository.getUserByConfirmationCode(command.code);
         if (user === null) throw new BadRequestException([{ message: 'Incorrect confirmationCode', field: 'code' }]);
-        if (user?.emailConfirmation.confirmationCode !== command.code || user?.emailConfirmation.isConfirmed === true)
-            throw new BadRequestException([{ message: 'Incorrect confirmationCode', field: 'code' }]);
+        console.log(user?.emailConfirmation.confirmationCode);
+        if (user?.emailConfirmation.confirmationCode !== command.code) throw new BadRequestException([{ message: 'Incorrect confirmationCode', field: 'code' }]);
+        if (user?.emailConfirmation.isConfirmed === true) throw new BadRequestException([{ message: 'You email confirmed', field: 'code' }]);
         const updateIsConfirmed = await this.usersRepository.updateUserCheckConfirmCode(command.code);
         if (updateIsConfirmed) {
             return true;
