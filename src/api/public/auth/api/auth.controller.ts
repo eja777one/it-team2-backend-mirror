@@ -5,8 +5,9 @@ import { CreateUserCommand } from '../../../super-admin/user/application/useCase
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { EmailInputModelType } from '../dto/emailResent.dto';
 import { ResentEmailCommand } from '../application/useCases/resentEmailUseCase';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {ApiBearerAuth, ApiBody, ApiCookieAuth, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {
+    sw_authMe,
     sw_login,
     sw_logout,
     sw_newPassword,
@@ -36,15 +37,20 @@ import { NewPasswordCommand } from '../application/useCases/newPassword.useCase'
 import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
 import { User } from '../../../../bd/user/entities/user.schema';
 import { UserDecorator } from '../../../../common/decorators/user.decorator';
+import {userAuthMeSchemaViewModel} from "./auth.swagger.schemas";
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     constructor(private commandBus: CommandBus, private jwtAdapter: JwtAdapter, private authService: AuthService) {}
 
-    @Get('me')
-    @HttpCode(HttpStatus.OK)
+    @ApiBearerAuth()
     @UseGuards(BearerAuthGuard)
+    @HttpCode(HttpStatus.OK)
+    @Get('me')
+    @ApiOperation(sw_authMe.summary)
+    @ApiResponse(sw_authMe.status200)
+    @ApiResponse(sw_authMe.status401)
     async authMe(@UserDecorator() user: User) {
         return { email: user.accountData.email, userId: user.accountData.id };
     }
@@ -113,6 +119,7 @@ export class AuthController {
         return { accessToken: accessToken };
     }
 
+    @ApiCookieAuth()
     @UseGuards(CookieGuard)
     @HttpCode(HttpStatus.OK)
     @Post('refresh-token')
@@ -158,6 +165,7 @@ export class AuthController {
         return;
     }
 
+    @ApiCookieAuth()
     @UseGuards(CookieGuard)
     @HttpCode(HttpStatus.NO_CONTENT)
     @Post('logout')

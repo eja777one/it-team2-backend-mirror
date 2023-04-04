@@ -88,6 +88,34 @@ const userTokenSchema = {
     }
 }
 
+const userAuthMeSchema = {
+    title: 'userAuthMeSchemaViewModel',
+    type: 'object',
+    properties: {
+        email: {
+            type: 'string',
+            example: 'powerful@gmail.com'
+        },
+        userId: {
+            type: 'string',
+            example: '642b57873fd3241964fef9aa'
+        }
+    }
+}
+
+export const sw_authMe = {
+    summary: {summary: 'Get user\'s info. User should have access token'},
+    status200: {
+        status: 200,
+        description: 'User\'s info was received',
+        schema: userAuthMeSchema
+    },
+    status401: {
+        status: 401,
+        description: 'Check your cookie. Make sure that user is exist',
+    },
+}
+
 export const sw_regitstration = {
     summary: {summary: 'Registration for users'},
     status204: {

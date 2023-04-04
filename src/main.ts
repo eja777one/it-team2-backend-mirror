@@ -16,7 +16,8 @@ async function bootstrap() {
         .setTitle('Inctagram API')
         .setDescription('Powerfull team should use this api to develop the best Inctagramm app')
         .setVersion('02_week')
-        .addTag('API')
+        .addBearerAuth()
+        .addCookieAuth('refreshToken')
         .build();
 
     const swaggerDoc = SwaggerModule.createDocument(app, swaggerConfig);

@@ -47,7 +47,7 @@ describe('AuthController (e2e)', () => {
         errorsMessages: [
             {
                 message: expect.any(String),
-                field: 'recoveryCode'
+                field: 'code'
             }
         ]
     };
@@ -309,6 +309,47 @@ describe('AuthController (e2e)', () => {
     });
 
     // TEST #17
+    it("User login. Status 200", async () => {
+        const response = await request(app.getHttpServer())
+            .post(`/auth/login`)
+            .send(userInput)
+
+        const result = response.body;
+
+        expect(response).toBeDefined();
+        expect(response.status).toBe(HttpStatus.OK);
+        expect(result).toStrictEqual({accessToken: expect.any(String)});
+
+        accessToken = result.accessToken;
+        cookie = response.get("Set-Cookie");
+    });
+
+    // TEST #18
+    it("Get user's info. Status 401", async () => {
+        const response = await request(app.getHttpServer())
+            .get(`/auth/me`)
+            .set("Authorization", `Bearer {accessToken.accessToken}`)
+
+        const result = response.body;
+
+        expect(response).toBeDefined();
+        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+    });
+
+    // TEST #19
+    it("Get user's info. Status 200", async () => {
+        const response = await request(app.getHttpServer())
+            .get(`/auth/me`)
+            .set("Authorization", `Bearer ${accessToken}`)
+
+        const result = response.body;
+
+        expect(response).toBeDefined();
+        expect(response.status).toBe(HttpStatus.OK);
+        expect(result).toStrictEqual({email: userInput.email ,userId: expect.any(String)});
+    });
+
+    // TEST #20
     it("User logout. Status 401", async () => {
         const response = await request(app.getHttpServer())
             .post(`/auth/logout`)
@@ -320,7 +361,7 @@ describe('AuthController (e2e)', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    // TEST #18
+    // TEST #21
     it("User logout. Status 204", async () => {
         const response = await request(app.getHttpServer())
             .post(`/auth/logout`)
@@ -332,7 +373,7 @@ describe('AuthController (e2e)', () => {
         expect(response.status).toBe(HttpStatus.NO_CONTENT);
     });
 
-    // TEST #19
+    // TEST #22
     it("User logout. Status 401", async () => {
         const response = await request(app.getHttpServer())
             .post(`/auth/logout`)
