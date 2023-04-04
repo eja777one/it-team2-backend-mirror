@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../entities/user.schema';
+import { add } from 'date-fns';
 
 @Injectable()
 export class UserRepository {
@@ -13,6 +14,9 @@ export class UserRepository {
         } catch (e) {
             return null;
         }
+    }
+    async getUserByRecoveryCode(code: string) {
+        return this.userModel.findOne({ 'emailConfirmation.recoveryCode': code }, { _id: 0, __v: 0, password: 0 });
     }
 
     async getUserByConfirmationCode(code: string) {
@@ -33,7 +37,10 @@ export class UserRepository {
     }
 
     async updateUserRecoveryPasswordCodeByEmail(email: string, NewRecoveryCode: string) {
-        const result = await this.userModel.updateOne({ 'accountData.email': email }, { $set: { 'emailConfirmation.recoveryCode': NewRecoveryCode } });
+        const result = await this.userModel.updateOne(
+            { 'accountData.email': email },
+            { $set: { 'emailConfirmation.recoveryCode': NewRecoveryCode }, 'emailConfirmation.expirationData': add(new Date(), { hours: 2 }) },
+        );
         return result.matchedCount === 1;
     }
 
@@ -43,7 +50,10 @@ export class UserRepository {
     }
 
     async updateUserConfirmationCodeByEmail(email: string, newConfirmationCode: string) {
-        const result = await this.userModel.updateOne({ 'accountData.email': email }, { $set: { 'emailConfirmation.confirmationCode': newConfirmationCode } });
+        const result = await this.userModel.updateOne(
+            { 'accountData.email': email },
+            { $set: { 'emailConfirmation.confirmationCode': newConfirmationCode, 'emailConfirmation.expirationData': add(new Date(), { hours: 2 }) } },
+        );
         return result.matchedCount === 1;
     }
 

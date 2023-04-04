@@ -19,10 +19,10 @@ class EmailConfirmation {
     @Prop()
     confirmationCode: string;
     @Prop()
-    expirationData: string;
+    expirationData: Date;
     @Prop()
     @IsDate()
-    recoveryCode: Date;
+    recoveryCode: string;
     @Prop()
     isConfirmed: boolean;
 }

@@ -27,7 +27,7 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
             emailConfirmation: {
                 confirmationCode: randomUUID(),
                 recoveryCode: randomUUID(),
-                expirationDate: add(new Date(), { hours: 1 }),
+                expirationData: add(new Date(), { hours: 2 }),
                 isConfirmed: false,
             },
         };
