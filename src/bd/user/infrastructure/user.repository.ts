@@ -3,10 +3,11 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../entities/user.schema';
 import { add } from 'date-fns';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserRepository {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private jwtService: JwtService) {}
 
     async getUserByEmail(email: string): Promise<UserDocument | null> {
         try {
@@ -21,6 +22,16 @@ export class UserRepository {
 
     async getUserByConfirmationCode(code: string) {
         return this.userModel.findOne({ 'emailConfirmation.confirmationCode': code }, { _id: 0, __v: 0, password: 0 });
+    }
+
+    async getUserByAccessToken(accessToken: string) {
+        try {
+            const result: any = this.jwtService.verify(accessToken, { secret: '123' });
+            const userId = result.userId;
+            return this.userModel.findOne({ 'accountData.id': userId });
+        } catch (error) {
+            return null;
+        }
     }
 
     async createUser(newUser): Promise<User | null> {

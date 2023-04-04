@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Ip, Post, Res, UseGuards, Headers } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Ip, Post, Res, UseGuards, Headers, Get } from '@nestjs/common';
 import { CreateUserInputModelType } from '../../../super-admin/user/dto/user.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../../../super-admin/user/application/useCases/createUser.UseCase';
@@ -33,11 +33,21 @@ import { PasswordRecoveryCodeCommand } from '../application/useCases/passwordRec
 import { AuthService } from '../application/auth.service';
 import { PasswordInputModelType } from '../dto/password.dto';
 import { NewPasswordCommand } from '../application/useCases/newPassword.useCase';
+import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
+import { User } from '../../../../bd/user/entities/user.schema';
+import { UserDecorator } from '../../../../common/decorators/user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     constructor(private commandBus: CommandBus, private jwtAdapter: JwtAdapter, private authService: AuthService) {}
+
+    @Get('me')
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(BearerAuthGuard)
+    async authMe(@UserDecorator() user: User) {
+        return { email: user.accountData.email, userId: user.accountData.id };
+    }
 
     @UseGuards(ThrottlerGuard)
     @HttpCode(HttpStatus.NO_CONTENT)
@@ -49,6 +59,19 @@ export class AuthController {
     @ApiResponse(sw_regitstration.status429)
     async registration(@Body() inputModel: CreateUserInputModelType) {
         return this.commandBus.execute(new CreateUserCommand(inputModel));
+    }
+
+    @UseGuards(ThrottlerGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Post('registration-confirmation')
+    @ApiOperation(sw_registrationConfirmation.summary)
+    @ApiBody(sw_registrationConfirmation.inputSchema)
+    @ApiResponse(sw_registrationConfirmation.status204)
+    @ApiResponse(sw_registrationConfirmation.status400)
+    @ApiResponse(sw_registrationConfirmation.status429)
+    async registrationConfirmation(@Body('code') code: string) {
+        await this.commandBus.execute(new RegistrationConfirmCommand(code));
+        return;
     }
 
     @UseGuards(ThrottlerGuard)
@@ -107,19 +130,6 @@ export class AuthController {
         });
 
         return { accessToken: accessToken };
-    }
-
-    @UseGuards(ThrottlerGuard)
-    @HttpCode(HttpStatus.NO_CONTENT)
-    @Post('registration-confirmation')
-    @ApiOperation(sw_registrationConfirmation.summary)
-    @ApiBody(sw_registrationConfirmation.inputSchema)
-    @ApiResponse(sw_registrationConfirmation.status204)
-    @ApiResponse(sw_registrationConfirmation.status400)
-    @ApiResponse(sw_registrationConfirmation.status429)
-    async registrationConfirmation(@Body('code') code: string) {
-        await this.commandBus.execute(new RegistrationConfirmCommand(code));
-        return;
     }
 
     @UseGuards(ThrottlerGuard)

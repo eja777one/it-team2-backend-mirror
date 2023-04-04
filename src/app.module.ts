@@ -31,7 +31,7 @@ import { NewPasswordUseCase } from './api/public/auth/application/useCases/newPa
 import { RegistrationConfirmUseCase } from './api/public/auth/application/useCases/registrationConfirm.useCase';
 import { PasswordRecoveryValidators } from './common/validators/passwordRecovery.validators';
 import { PasswordRecoveryCodeUseCase } from './api/public/auth/application/useCases/passwordRecovery.useCase';
-import {TestsController} from "./test/test.controller";
+import { TestsController } from './test/test.controller';
 
 const controller = [AppController, AuthController, TestsController];
 const service = [AppService, EmailService, AuthService, JwtAdapter, JwtService];

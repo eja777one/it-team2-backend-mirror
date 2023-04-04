@@ -11,6 +11,20 @@ window.onload = function() {
   "swaggerDoc": {
     "openapi": "3.0.0",
     "paths": {
+      "/auth/me": {
+        "get": {
+          "operationId": "AuthController_authMe",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
       "/auth/registration": {
         "post": {
           "operationId": "AuthController_registration",
@@ -65,6 +79,73 @@ window.onload = function() {
                               "type": "string",
                               "description": "it should be incorrect field from request body",
                               "example": "email"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "429": {
+              "description": "More than 5 requests for 10 seconds"
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/registration-confirmation": {
+        "post": {
+          "operationId": "AuthController_registrationConfirmation",
+          "summary": "User can activate account by confirmation code",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "CodeConfirmInputModelType",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "f0b00c17-bd4d-4113-b2c4-1a7a29124970",
+                      "description": "it should be code from mail which sent to user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": "User's account was activated"
+            },
+            "400": {
+              "description": "User is already activated or confirm code is incorrect/expired",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "messages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "incorrect confirmedCode"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "code"
                             }
                           }
                         }
@@ -238,73 +319,6 @@ window.onload = function() {
             },
             "401": {
               "description": "Refresh token is un exist or expired"
-            }
-          },
-          "tags": [
-            "Auth"
-          ]
-        }
-      },
-      "/auth/registration-confirmation": {
-        "post": {
-          "operationId": "AuthController_registrationConfirmation",
-          "summary": "User can activate account by confirmation code",
-          "parameters": [],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "CodeConfirmInputModelType",
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "f0b00c17-bd4d-4113-b2c4-1a7a29124970",
-                      "description": "it should be code from mail which sent to user"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "User's account was activated"
-            },
-            "400": {
-              "description": "User is already activated or confirm code is incorrect/expired",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "title": "APIResultError",
-                    "type": "object",
-                    "properties": {
-                      "messages": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "message": {
-                              "type": "string",
-                              "description": "any error message",
-                              "example": "incorrect confirmedCode"
-                            },
-                            "field": {
-                              "type": "string",
-                              "description": "it should be incorrect field from request body",
-                              "example": "code"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "429": {
-              "description": "More than 5 requests for 10 seconds"
             }
           },
           "tags": [
