@@ -7,7 +7,7 @@ const badRequestSchema = {
     title: 'APIResultError',
     type: 'object',
     properties: {
-        messages: {
+        errorsMessages: {
             type: 'array',
             items: {
                 type: 'object',
@@ -32,7 +32,7 @@ const badRequestCodeConfirmSchema = {
     title: 'APIResultError',
     type: 'object',
     properties: {
-        messages: {
+        errorsMessages: {
             type: 'array',
             items: {
                 type: 'object',
@@ -57,7 +57,7 @@ const badRequestRecoveryCodeSchema = {
     title: 'APIResultError',
     type: 'object',
     properties: {
-        messages: {
+        errorsMessages: {
             type: 'array',
             items: {
                 type: 'object',
