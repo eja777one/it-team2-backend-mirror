@@ -14,7 +14,8 @@ async function bootstrap() {
 
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Inctagram API')
-        .setDescription('Powerfull team should use this api to develop the best Inctagramm app')
+        .setDescription('Powerfull team should use this api to develop the best Inctagramm app.' + ' ' +
+        'Base URL is https://it-team2-backend-mirror.vercel.app')
         .setVersion('02_week')
         .addBearerAuth()
         .addCookieAuth('refreshToken')
