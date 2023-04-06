@@ -29,7 +29,7 @@ export class EmailService {
                 subject: subject,
                 html: `<h1>Thank for your registration</h1>
                         <p>To finish recoveryPassword: eto cod =>  ${NewRecoveryCode} a eto net =>
-                                 <a href='https://instagram-frontend-theta.vercel.app/auth/recovery-password?code=${NewRecoveryCode}'>recovery password</a>
+                                 <a href='https://instagram-frontend-theta.vercel.app/auth/new-password?code=${NewRecoveryCode}'>recovery password</a>
                         </p>`,
             });
             return true;
