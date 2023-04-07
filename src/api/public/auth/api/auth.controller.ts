@@ -111,10 +111,7 @@ export class AuthController {
 
         const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(userId, sessionId);
 
-        response.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: false,
-        });
+        response.cookie('refreshToken', refreshToken, { sameSite: 'none', httpOnly: true, secure: true });
 
         return { accessToken: accessToken };
     }
@@ -131,10 +128,7 @@ export class AuthController {
 
         const { accessToken, refreshToken } = await this.jwtAdapter.getTokens(payload.userId, payload.sessionId);
 
-        response.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: false,
-        });
+        response.cookie('refreshToken', refreshToken, { sameSite: 'none', httpOnly: true, secure: true });
 
         return { accessToken: accessToken };
     }
