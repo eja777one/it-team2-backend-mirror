@@ -8,9 +8,18 @@ import { configNestApp } from './config.main';
 
 const serverUrl = 'http://localhost:5000';
 
+const options = {
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    credentials: true,
+    // allowedHeaders: 'Content-Type, Accept, Authorization',
+};
+
 async function bootstrap() {
     const baseApp = await NestFactory.create(AppModule);
     const app = configNestApp(baseApp);
+    app.enableCors(options);
 
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Inctagram API')
