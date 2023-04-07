@@ -27,7 +27,7 @@ export class EmailService {
                 from: '"RUSEL" <heeca@mail.ru>', // sender address
                 to: email,
                 subject: subject,
-                html: `<h1>Thank for your registration</h1>
+                html: `<h1>You recovery code</h1>
                         <p>To finish recoveryPassword: eto cod =>  ${NewRecoveryCode} a eto net =>
                                  <a href='https://instagram-frontend-theta.vercel.app/auth/new-password?code=${NewRecoveryCode}'>recovery password</a>
                         </p>`,

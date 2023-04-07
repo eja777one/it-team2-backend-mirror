@@ -13,7 +13,7 @@ export class NewPasswordUseCase implements ICommandHandler<NewPasswordCommand> {
     constructor(protected userRepository: UserRepository) {}
     async execute(command: NewPasswordCommand) {
         const user = await this.userRepository.getUserByRecoveryCode(command.code);
-        if (!user) throw new BadRequestException([{ message: 'Incorrect recoverCoda', field: 'code' }]);
+        if (!user) throw new BadRequestException([{ message: 'Incorrect recoveryCode', field: 'code' }]);
         if (user.emailConfirmation.expirationData < new Date()) {
             throw new BadRequestException([{ message: 'The validity period is over', field: 'code' }]);
         }

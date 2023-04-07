@@ -5,8 +5,6 @@ import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 
 export function configNestApp(app): INestApplication {
-    app.use(cookieParser());
-    app.enableCors();
     app.useGlobalPipes(
         new ValidationPipe({
             transform: true,
