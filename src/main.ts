@@ -5,11 +5,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { createWriteStream } from 'fs';
 import { get } from 'http';
 import { configNestApp } from './config.main';
+import cookieParser from 'cookie-parser';
 
 const serverUrl = 'http://localhost:5000';
 
 const options = {
-    origin: 'http://localhost:3000',
+    origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     credentials: true,
@@ -19,8 +20,8 @@ const options = {
 async function bootstrap() {
     const baseApp = await NestFactory.create(AppModule);
     const app = configNestApp(baseApp);
+    app.use(cookieParser());
     app.enableCors(options);
-
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Inctagram API')
         .setDescription('Powerfull team should use this api to develop the best Inctagramm app.' + ' ' + 'Base URL is https://it-team2-backend-mirror.vercel.app')

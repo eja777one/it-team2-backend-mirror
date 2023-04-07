@@ -37,10 +37,8 @@ export class TestsController {
     @ApiResponse(sw_activateUser.status400)
     async activateUser(@Param('userEmail') userEmail: string) {
         const user = await this.userRepository.getUserByEmail(userEmail);
-        console.log(user);
         if (!user) throw new NotFoundException();
         const updateUser = await this.userRepository.activateUser(userEmail);
-        console.log(updateUser);
         if (!updateUser) throw new NotFoundException();
         return;
     }
