@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../entities/user.schema';
 import { add } from 'date-fns';
 import { JwtService } from '@nestjs/jwt';
+import { AddProfileInputModel } from '../../../api/public/profile/dto/addProfile.dto';
 
 @Injectable()
 export class UserRepository {
@@ -66,6 +67,10 @@ export class UserRepository {
             { $set: { 'emailConfirmation.confirmationCode': newConfirmationCode, 'emailConfirmation.expirationData': add(new Date(), { hours: 2 }) } },
         );
         return result.matchedCount === 1;
+    }
+
+    async updateUserProfileInfo(inputModel: AddProfileInputModel, userId: string) {
+        const result = await this.userModel.updateOne({ 'accountData.id': userId }, { profileInfo: inputModel });
     }
 
     // methods for testing

@@ -22,6 +22,7 @@ export function configNestApp(app): INestApplication {
                         });
                     });
                 });
+
                 throw new BadRequestException(errorsForResponse);
             },
         }),

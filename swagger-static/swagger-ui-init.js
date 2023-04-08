@@ -522,6 +522,38 @@ window.onload = function() {
           ]
         }
       },
+      "/profile/edit": {
+        "put": {
+          "operationId": "ProfileController_addProfile",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddProfileInputModel"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/queryProfile/{userName}": {
+        "get": {
+          "operationId": "QueryProfileController_getProfile",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
       "/testing/db-user/{userEmail}": {
         "get": {
           "operationId": "TestsController_getUser",
@@ -637,7 +669,12 @@ window.onload = function() {
           "name": "refreshToken"
         }
       },
-      "schemas": {}
+      "schemas": {
+        "AddProfileInputModel": {
+          "type": "object",
+          "properties": {}
+        }
+      }
     }
   },
   "customOptions": {}

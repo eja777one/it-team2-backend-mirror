@@ -1,13 +1,13 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { IsEmailInInDBValidator } from '../validators/register.validators';
+import { AddProfileValidator } from '../validators/addProfile.validator';
 
-export function IsEmailInDb(validationOptions?: ValidationOptions) {
+export function CheckUserNameFromDB(validationOptions?: ValidationOptions) {
     return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
-            validator: IsEmailInInDBValidator,
+            validator: AddProfileValidator,
         });
     };
 }

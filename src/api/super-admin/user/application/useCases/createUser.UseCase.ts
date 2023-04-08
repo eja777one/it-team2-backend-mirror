@@ -19,7 +19,6 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
         const newUser = {
             accountData: {
                 id: new Date().valueOf().toString(),
-                // login: command.inputModel.login,
                 email: command.inputModel.email,
                 password: passwordHash,
                 createdAt: new Date().toISOString(),
@@ -29,6 +28,13 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
                 recoveryCode: randomUUID(),
                 expirationData: add(new Date(), { hours: 2 }),
                 isConfirmed: false,
+            },
+            profileInfo: {
+                username: command.inputModel.userName,
+                surname: null,
+                birthday: null,
+                city: null,
+                aboutMe: null,
             },
         };
         const sendEmail = await this.emailService.sendEmail(newUser.accountData.email, 'Registr', newUser.emailConfirmation.confirmationCode);
@@ -42,10 +48,12 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
         }
         const result = await this.usersRepository.createUser({ ...newUser });
         if (!result)
-            throw new BadRequestException({
-                message: 'Bad',
-                field: 'login or Password',
-            });
+            throw new BadRequestException([
+                {
+                    message: 'Bad',
+                    field: 'login or Password',
+                },
+            ]);
         return {
             id: result.accountData.id,
             login: result.accountData.login,

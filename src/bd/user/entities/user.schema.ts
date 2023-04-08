@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsDate } from 'class-validator';
+import { IsDate, Length } from 'class-validator';
 
 export type UserDocument = User & Document;
 
@@ -26,6 +26,20 @@ class EmailConfirmation {
     @Prop()
     isConfirmed: boolean;
 }
+class ProfileInfo {
+    @Prop()
+    userName: string;
+    @Prop()
+    name: string;
+    @Prop()
+    surname: string;
+    @Prop()
+    birthday: string;
+    @Prop()
+    city: string;
+    @Prop()
+    aboutMe: string;
+}
 
 @Schema()
 export class User {
@@ -33,6 +47,8 @@ export class User {
     accountData: AccountData;
     @Prop()
     emailConfirmation: EmailConfirmation;
+    @Prop()
+    profileInfo: ProfileInfo;
 
     isConfirmed: () => boolean;
 }

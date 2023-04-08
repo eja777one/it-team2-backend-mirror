@@ -1,17 +1,17 @@
-import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../../bd/user/entities/user.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
-export class IsEmailInInDBValidator implements ValidatorConstraintInterface {
+export class AddProfileValidator implements ValidatorConstraintInterface {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-    async validate(email: string) {
+    async validate(userName: string) {
         try {
             const user = await this.userModel.findOne({
-                'accountData.email': email,
+                'profileInfo.userName': userName,
             });
             if (user) return false;
             return true;
@@ -21,6 +21,6 @@ export class IsEmailInInDBValidator implements ValidatorConstraintInterface {
     }
 
     defaultMessage(args: ValidationArguments) {
-        return 'This email already in db (User with this email is already registered)';
+        return 'This login already in db (User with this login is already registered)';
     }
 }

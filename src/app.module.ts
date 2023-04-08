@@ -8,7 +8,7 @@ import { getMailConfig } from './common/helpers/email/mail.config';
 import { User, UserSchema } from './bd/user/entities/user.schema';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { IsEmailInInDBValidator, IsLoginInDBValidator } from './common/validators/register.validators';
+import { IsEmailInInDBValidator } from './common/validators/register.validators';
 import { createUserUseCase } from './api/super-admin/user/application/useCases/createUser.UseCase';
 import { UserRepository } from './bd/user/infrastructure/user.repository';
 import { EmailService } from './common/helpers/email/email.service';
@@ -32,11 +32,18 @@ import { RegistrationConfirmUseCase } from './api/public/auth/application/useCas
 import { PasswordRecoveryValidators } from './common/validators/passwordRecovery.validators';
 import { PasswordRecoveryCodeUseCase } from './api/public/auth/application/useCases/passwordRecovery.useCase';
 import { TestsController } from './test/test.controller';
+import { ProfileController } from './api/public/profile/api/profile.controller';
+import { AddProfileValidator } from './common/validators/addProfile.validator';
+import { EditProfileUseCase } from './api/public/profile/application/useCases/editProfileUseCase';
+import { UserQueryRepository } from './bd/user/infrastructure/user-query.repository';
+import { QueryProfileController } from './api/public/profile/api/queryProfile.controller';
+import { QueryProfileService } from './api/public/profile/application/profile.service';
+import { ProfileRepository } from './api/public/profile/infrastructure/profile.repository';
 
-const controller = [AppController, AuthController, TestsController];
-const service = [AppService, EmailService, AuthService, JwtAdapter, JwtService];
-const repository = [UserRepository, SessionRepository];
-const validators = [IsLoginInDBValidator, IsEmailInInDBValidator, ResendEmailValidator, PasswordRecoveryValidators, PasswordRecoveryValidators];
+const controller = [AppController, AuthController, ProfileController, QueryProfileController, TestsController];
+const service = [AppService, EmailService, AuthService, QueryProfileService, JwtAdapter, JwtService];
+const repository = [UserRepository, SessionRepository, UserQueryRepository, ProfileRepository];
+const validators = [AddProfileValidator, IsEmailInInDBValidator, ResendEmailValidator, PasswordRecoveryValidators, PasswordRecoveryValidators];
 const useCases = [
     createUserUseCase,
     ResentEmailUseCase,
@@ -48,6 +55,7 @@ const useCases = [
     RegistrationConfirmUseCase,
     ResentEmailUseCase,
     PasswordRecoveryCodeUseCase,
+    EditProfileUseCase,
 ];
 const strategy = [LocalStrategy];
 

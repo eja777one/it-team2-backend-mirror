@@ -28,14 +28,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 errorsMessages: [],
             };
             const responseBody: any = exception.getResponse();
-            responseBody.message.forEach((m) =>
-                errorResponse.errorsMessages.push({
-                    message: m.message,
-                    field: m.field,
-                }),
-            );
+            try {
+                if (responseBody.message.length >= 2)
+                    responseBody.message.forEach((m) =>
+                        errorResponse.errorsMessages.push({
+                            message: m.message,
+                            field: m.field,
+                        }),
+                    );
+                else errorResponse.errorsMessages.push({ message: responseBody.message[0].message, field: responseBody.message[0].field });
+                return response.status(status).json(errorResponse);
+            } catch (e) {
+                response.status(status).json(errorResponse);
+            }
+
             //   response.status(status).json({ message: responseBody.message });
-            response.status(status).json(errorResponse);
         } else {
             response.sendStatus(status);
         }
