@@ -12,7 +12,6 @@ export class QueryProfileController {
     @Get(':userName')
     @UseGuards(BearerAuthGuard)
     async getProfile(@UserDecorator() user: User, @Param('userName') userName) {
-        console.log('tyt');
         return await this.queryProfileService.getProfile(userName);
     }
 }

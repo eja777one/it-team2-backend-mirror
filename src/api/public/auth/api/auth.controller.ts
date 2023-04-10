@@ -37,7 +37,6 @@ import { NewPasswordCommand } from '../application/useCases/newPassword.useCase'
 import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
 import { User } from '../../../../bd/user/entities/user.schema';
 import { UserDecorator } from '../../../../common/decorators/user.decorator';
-import { userAuthMeSchemaViewModel } from './auth.swagger.schemas';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -52,7 +51,7 @@ export class AuthController {
     @ApiResponse(sw_authMe.status200)
     @ApiResponse(sw_authMe.status401)
     async authMe(@UserDecorator() user: User) {
-        return { email: user.accountData.email, userId: user.accountData.id };
+        return { email: user.accountData.email, userId: user.accountData.id, userName: user.profileInfo.userName };
     }
 
     @UseGuards(ThrottlerGuard)
