@@ -525,33 +525,173 @@ window.onload = function() {
       "/profile/edit": {
         "put": {
           "operationId": "ProfileController_addProfile",
+          "summary": "User can edit own profile. User should have access token",
           "parameters": [],
           "requestBody": {
             "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddProfileInputModel"
+                  "title": "AddProfileInputModel",
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string",
+                      "minLength": 4,
+                      "maxLength": 30,
+                      "example": "Harley_Quinn",
+                      "description": "it should be valid userName"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 4,
+                      "maxLength": 20,
+                      "example": "Margo",
+                      "description": "it should be valid name"
+                    },
+                    "surname": {
+                      "type": "string",
+                      "minLength": 4,
+                      "maxLength": 20,
+                      "example": "Robbie",
+                      "description": "it should be valid surname"
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "maxLength": 20,
+                      "example": "02.07.1990"
+                    },
+                    "city": {
+                      "type": "string",
+                      "maxLength": 20,
+                      "example": "Dalby"
+                    },
+                    "aboutMe": {
+                      "type": "string",
+                      "maxLength": 200,
+                      "example": "Famous actress"
+                    }
+                  }
                 }
               }
             }
           },
           "responses": {
             "200": {
-              "description": ""
+              "description": "Profile was added to user"
+            },
+            "400": {
+              "description": "Incorrect field(s) in request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "errorsMessages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "incorrect name"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "name"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-          }
+          },
+          "tags": [
+            "Profile"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
         }
       },
       "/queryProfile/{userName}": {
         "get": {
           "operationId": "QueryProfileController_getProfile",
+          "summary": "User can get own profile. User should have access token",
           "parameters": [],
           "responses": {
             "200": {
-              "description": ""
+              "description": "Profile was sent to user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "AddProfileInputModel",
+                    "type": "object",
+                    "properties": {
+                      "userName": {
+                        "type": "string",
+                        "minLength": 4,
+                        "maxLength": 30,
+                        "example": "Harley_Quinn",
+                        "description": "it should be valid userName"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 4,
+                        "maxLength": 20,
+                        "example": "Margo",
+                        "description": "it should be valid name"
+                      },
+                      "surname": {
+                        "type": "string",
+                        "minLength": 4,
+                        "maxLength": 20,
+                        "example": "Robbie",
+                        "description": "it should be valid surname"
+                      },
+                      "birthday": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "example": "02.07.1990"
+                      },
+                      "city": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "example": "Dalby"
+                      },
+                      "aboutMe": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "example": "Famous actress"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
+            },
+            "404": {
+              "description": "User's profile was not found"
             }
-          }
+          },
+          "tags": [
+            "Profile"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
         }
       },
       "/testing/db-user/{userEmail}": {
@@ -650,8 +790,8 @@ window.onload = function() {
     },
     "info": {
       "title": "Inctagram API",
-      "description": "Powerfull team should use this api to develop the best Inctagramm app. Base URL is https://it-team2-backend-mirror.vercel.app",
-      "version": "02_week",
+      "description": "Powerfull team should use this api to develop the best Inctagramm app.\nBase URL is https://it-team2-backend-mirror.vercel.app",
+      "version": "03_week",
       "contact": {}
     },
     "tags": [],
@@ -669,12 +809,7 @@ window.onload = function() {
           "name": "refreshToken"
         }
       },
-      "schemas": {
-        "AddProfileInputModel": {
-          "type": "object",
-          "properties": {}
-        }
-      }
+      "schemas": {}
     }
   },
   "customOptions": {}
