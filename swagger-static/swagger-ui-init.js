@@ -814,7 +814,7 @@ window.onload = function() {
       },
       "/avatar/{userName}": {
         "get": {
-          "operationId": "AvatarController_getAvatar",
+          "operationId": "AvatarController_getFile",
           "parameters": [],
           "responses": {
             "200": {

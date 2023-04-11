@@ -21,8 +21,7 @@ export class FileStorageAdapter {
         try {
             const command = new GetObjectCommand(bucketParams);
             const response = await this.S3Client.send(command);
-            // @ts-ignore
-            return response.Body.read().toString('base64');
+            return response.Body;
         } catch (e) {
             console.log(e);
         }
