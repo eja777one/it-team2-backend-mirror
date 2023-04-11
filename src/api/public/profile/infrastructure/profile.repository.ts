@@ -7,8 +7,9 @@ import { Model } from 'mongoose';
 export class ProfileRepository {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-    async getProfile(username: string) {
-        const result = await this.userModel.findOne({ 'profileInfo.userName': username }, { profileInfo: 1 });
+    async getProfile(userName: string) {
+        const result = await this.userModel.findOne({ 'profileInfo.userName': userName }, { profileInfo: 1 });
+        console.log(userName);
         if (!result) throw new NotFoundException();
         return result;
     }

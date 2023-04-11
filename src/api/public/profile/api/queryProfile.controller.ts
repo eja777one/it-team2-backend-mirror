@@ -4,8 +4,8 @@ import { UserDecorator } from '../../../../common/decorators/user.decorator';
 import { User } from '../../../../bd/user/entities/user.schema';
 import { CommandBus } from '@nestjs/cqrs';
 import { QueryProfileService } from '../application/profile.service';
-import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {sw_addProfile, sw_getProfile} from "./profile.swagger.info";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { sw_addProfile, sw_getProfile } from './profile.swagger.info';
 
 @ApiTags('Profile')
 @Controller('queryProfile')

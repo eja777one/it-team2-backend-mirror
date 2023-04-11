@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { configNestApp } from './config.main';
 import cookieParser from 'cookie-parser';
-import {swaggerConfig, writeSwaggerFiles} from "./config.swagger";
+import { swaggerConfig, writeSwaggerFiles } from './config.swagger';
 
 const options = {
     origin: true,

@@ -30,7 +30,7 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
                 isConfirmed: false,
             },
             profileInfo: {
-                username: command.inputModel.userName,
+                userName: command.inputModel.userName,
                 surname: null,
                 birthday: null,
                 city: null,

@@ -2,7 +2,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Put, Res } from '@nestjs/common';
 import { UserRepository } from '../bd/user/infrastructure/user.repository';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import {sw_activateUser, sw_deleteAllData, sw_deleteUser, sw_getUser, sw_getUsers} from './test.swagger.info';
+import { sw_activateUser, sw_deleteAllData, sw_deleteUser, sw_getUser, sw_getUsers } from './test.swagger.info';
 
 @ApiTags('Testing')
 @SkipThrottle()

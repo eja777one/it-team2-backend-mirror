@@ -1,6 +1,6 @@
-import {DocumentBuilder} from "@nestjs/swagger";
-import {get} from "http";
-import {createWriteStream} from "fs";
+import { DocumentBuilder } from '@nestjs/swagger';
+import { get } from 'http';
+import { createWriteStream } from 'fs';
 
 const description = `Powerfull team should use this api to develop the best Inctagramm app.
 Base URL is https://it-team2-backend-mirror.vercel.app`;

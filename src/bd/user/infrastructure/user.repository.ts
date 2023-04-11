@@ -1,37 +1,36 @@
-import {Injectable} from '@nestjs/common';
-import {Model} from 'mongoose';
-import {InjectModel} from '@nestjs/mongoose';
-import {User, UserDocument} from '../entities/user.schema';
-import {add} from 'date-fns';
-import {JwtService} from '@nestjs/jwt';
-import {AddProfileInputModel} from '../../../api/public/profile/dto/addProfile.dto';
+import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from '../entities/user.schema';
+import { add } from 'date-fns';
+import { JwtService } from '@nestjs/jwt';
+import { AddProfileInputModel } from '../../../api/public/profile/dto/addProfile.dto';
 
 @Injectable()
 export class UserRepository {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private jwtService: JwtService) {
-    }
+    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private jwtService: JwtService) {}
 
     async getUserByEmail(email: string): Promise<UserDocument | null> {
         try {
-            return this.userModel.findOne({'accountData.email': email});
+            return this.userModel.findOne({ 'accountData.email': email });
         } catch (e) {
             return null;
         }
     }
 
     async getUserByRecoveryCode(code: string) {
-        return this.userModel.findOne({'emailConfirmation.recoveryCode': code}, {_id: 0, __v: 0, password: 0});
+        return this.userModel.findOne({ 'emailConfirmation.recoveryCode': code }, { _id: 0, __v: 0, password: 0 });
     }
 
     async getUserByConfirmationCode(code: string) {
-        return this.userModel.findOne({'emailConfirmation.confirmationCode': code}, {_id: 0, __v: 0, password: 0});
+        return this.userModel.findOne({ 'emailConfirmation.confirmationCode': code }, { _id: 0, __v: 0, password: 0 });
     }
 
     async getUserByAccessToken(accessToken: string) {
         try {
-            const result: any = this.jwtService.verify(accessToken, {secret: '123'});
+            const result: any = this.jwtService.verify(accessToken, { secret: '123' });
             const userId = result.userId;
-            return this.userModel.findOne({'accountData.id': userId});
+            return this.userModel.findOne({ 'accountData.id': userId });
         } catch (error) {
             return null;
         }
@@ -46,41 +45,41 @@ export class UserRepository {
     }
 
     async updatePasswordRecoveryCode(recoveryCode: string, newHashPassword: string) {
-        const result = await this.userModel.updateOne({'emailConfirmation.recoveryCode': recoveryCode}, {$set: {'accountData.password': newHashPassword}});
+        const result = await this.userModel.updateOne({ 'emailConfirmation.recoveryCode': recoveryCode }, { $set: { 'accountData.password': newHashPassword } });
         return result.matchedCount === 1;
     }
 
     async updateUserRecoveryPasswordCodeByEmail(email: string, NewRecoveryCode: string) {
         const result = await this.userModel.updateOne(
-            {'accountData.email': email},
+            { 'accountData.email': email },
             {
-                $set: {'emailConfirmation.recoveryCode': NewRecoveryCode},
-                'emailConfirmation.expirationData': add(new Date(), {hours: 2})
+                $set: { 'emailConfirmation.recoveryCode': NewRecoveryCode },
+                'emailConfirmation.expirationData': add(new Date(), { hours: 2 }),
             },
         );
         return result.matchedCount === 1;
     }
 
     async updateUserCheckConfirmCode(code: string) {
-        const result = await this.userModel.updateOne({'emailConfirmation.confirmationCode': code}, {$set: {'emailConfirmation.isConfirmed': true}});
+        const result = await this.userModel.updateOne({ 'emailConfirmation.confirmationCode': code }, { $set: { 'emailConfirmation.isConfirmed': true } });
         return result.matchedCount === 1;
     }
 
     async updateUserConfirmationCodeByEmail(email: string, newConfirmationCode: string) {
         const result = await this.userModel.updateOne(
-            {'accountData.email': email},
+            { 'accountData.email': email },
             {
                 $set: {
                     'emailConfirmation.confirmationCode': newConfirmationCode,
-                    'emailConfirmation.expirationData': add(new Date(), {hours: 2})
-                }
+                    'emailConfirmation.expirationData': add(new Date(), { hours: 2 }),
+                },
             },
         );
         return result.matchedCount === 1;
     }
 
     async updateUserProfileInfo(inputModel: AddProfileInputModel, userId: string) {
-        const result = await this.userModel.updateOne({'accountData.id': userId}, {profileInfo: inputModel});
+        const result = await this.userModel.updateOne({ 'accountData.id': userId }, { profileInfo: inputModel });
     }
 
     // methods for testing
@@ -91,12 +90,12 @@ export class UserRepository {
     }
 
     async deleteUser(email: string) {
-        const result = await this.userModel.deleteOne({'accountData.email': email});
+        const result = await this.userModel.deleteOne({ 'accountData.email': email });
         return result.deletedCount === 1;
     }
 
     async activateUser(email) {
-        const result = await this.userModel.updateOne({'accountData.email': email}, {$set: {'emailConfirmation.isConfirmed': true}});
+        const result = await this.userModel.updateOne({ 'accountData.email': email }, { $set: { 'emailConfirmation.isConfirmed': true } });
         return result.matchedCount === 1;
     }
 

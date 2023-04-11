@@ -5,7 +5,7 @@ import { ProfileRepository } from '../infrastructure/profile.repository';
 export class QueryProfileService {
     constructor(protected profileRepository: ProfileRepository) {}
 
-    async getProfile(username: string) {
-        return this.profileRepository.getProfile(username);
+    async getProfile(userName: string) {
+        return this.profileRepository.getProfile(userName);
     }
 }
