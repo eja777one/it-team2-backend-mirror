@@ -31,10 +31,10 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
             },
             profileInfo: {
                 userName: command.inputModel.userName,
-                surname: null,
-                birthday: null,
-                city: null,
-                aboutMe: null,
+                surname: '',
+                birthday: '',
+                city: '',
+                aboutMe: '',
             },
         };
         const sendEmail = await this.emailService.sendEmail(newUser.accountData.email, 'Registr', newUser.emailConfirmation.confirmationCode);
