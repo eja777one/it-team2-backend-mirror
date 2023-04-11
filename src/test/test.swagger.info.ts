@@ -30,6 +30,18 @@ export const sw_getUser = {
     },
 };
 
+export const sw_deleteUser = {
+    summary: { summary: 'Delete DB user by email' },
+    status204: {
+        status: 204,
+        description: 'User was deleted',
+    },
+    status404: {
+        status: 404,
+        description: 'User with this email is un exist',
+    },
+};
+
 export const sw_getUsers = {
     summary: { summary: 'Get DB users' },
     status200: {

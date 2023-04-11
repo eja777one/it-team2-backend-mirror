@@ -2,7 +2,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Put, Res } from '@nestjs/common';
 import { UserRepository } from '../bd/user/infrastructure/user.repository';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { sw_activateUser, sw_deleteAllData, sw_getUser, sw_getUsers } from './test.swagger.info';
+import {sw_activateUser, sw_deleteAllData, sw_deleteUser, sw_getUser, sw_getUsers} from './test.swagger.info';
 
 @ApiTags('Testing')
 @SkipThrottle()
@@ -41,6 +41,16 @@ export class TestsController {
         const updateUser = await this.userRepository.activateUser(userEmail);
         if (!updateUser) throw new NotFoundException();
         return;
+    }
+
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Delete('db-user/:userEmail')
+    @ApiOperation(sw_deleteUser.summary)
+    @ApiResponse(sw_deleteUser.status204)
+    @ApiResponse(sw_deleteUser.status404)
+    async deleteUser(@Param('userEmail') userEmail: string) {
+        const isUserDeleted = await this.userRepository.deleteUser(userEmail);
+        if (!isUserDeleted) throw new NotFoundException();
     }
 
     @HttpCode(HttpStatus.NO_CONTENT)
