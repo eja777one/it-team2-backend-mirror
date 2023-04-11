@@ -719,6 +719,31 @@ window.onload = function() {
           "tags": [
             "Testing"
           ]
+        },
+        "delete": {
+          "operationId": "TestsController_deleteUser",
+          "summary": "Delete DB user by email",
+          "parameters": [
+            {
+              "name": "userEmail",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "User was deleted"
+            },
+            "404": {
+              "description": "User with this email is un exist"
+            }
+          },
+          "tags": [
+            "Testing"
+          ]
         }
       },
       "/testing/db-users": {
