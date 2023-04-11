@@ -43,7 +43,7 @@ import { AvatarController } from './api/public/profile/api/avatar.controller';
 import { SaveUserAvatarCommandUseCase } from './api/public/profile/application/useCases/saveUserAvatarUseCase';
 import { FileStorageAdapter } from './common/adapter/fileStorageAdapterService';
 import { DeleteAvatarCommandUseCase } from './api/public/profile/application/useCases/deleteAvatarUseCase';
-import { GetAvatarCommandUseCase } from './api/public/profile/api/getAvatarUseCase';
+import { GetAvatarCommandUseCase } from './api/public/profile/application/useCases/getAvatarUseCase';
 
 const controller = [AppController, AuthController, ProfileController, QueryProfileController, TestsController, AvatarController];
 const service = [AppService, EmailService, AuthService, QueryProfileService, JwtAdapter, JwtService, FileStorageAdapter];

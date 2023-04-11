@@ -522,7 +522,7 @@ window.onload = function() {
           ]
         }
       },
-      "/profile/edit": {
+      "/profile/edit/{userName}": {
         "put": {
           "operationId": "ProfileController_addProfile",
           "summary": "User can edit own profile. User should have access token",
@@ -828,7 +828,7 @@ window.onload = function() {
           "operationId": "AvatarController_uploadAvatar",
           "parameters": [],
           "responses": {
-            "201": {
+            "204": {
               "description": ""
             }
           }
@@ -839,7 +839,7 @@ window.onload = function() {
           "operationId": "AvatarController_deleteAvatar",
           "parameters": [],
           "responses": {
-            "200": {
+            "204": {
               "description": ""
             }
           }

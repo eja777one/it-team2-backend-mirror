@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { FileStorageAdapter } from '../../../../common/adapter/fileStorageAdapterService';
-import { UserRepository } from '../../../../bd/user/infrastructure/user.repository';
-import { UserQueryRepository } from '../../../../bd/user/infrastructure/user-query.repository';
+import { FileStorageAdapter } from '../../../../../common/adapter/fileStorageAdapterService';
+import { UserRepository } from '../../../../../bd/user/infrastructure/user.repository';
+import { UserQueryRepository } from '../../../../../bd/user/infrastructure/user-query.repository';
 
 export class GetAvatarCommand {
     constructor(public userName: string) {}

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Injectable, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, HttpStatus, Injectable, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
@@ -6,7 +6,7 @@ import { UserDecorator } from '../../../../common/decorators/user.decorator';
 import { User } from '../../../../bd/user/entities/user.schema';
 import { SaveUserAvatarCommand } from '../application/useCases/saveUserAvatarUseCase';
 import { DeleteAvatarCommand } from '../application/useCases/deleteAvatarUseCase';
-import { GetAvatarCommand, GetAvatarCommandUseCase } from './getAvatarUseCase';
+import { GetAvatarCommand, GetAvatarCommandUseCase } from '../application/useCases/getAvatarUseCase';
 import * as CircularJSON from 'circular-json';
 
 @Injectable()
@@ -22,6 +22,7 @@ export class AvatarController {
     }
 
     @Post('upload')
+    @HttpCode(HttpStatus.NO_CONTENT)
     @UseInterceptors(FileInterceptor('file'))
     @UseGuards(BearerAuthGuard)
     async uploadAvatar(@UploadedFile() avatarFile: Express.Multer.File, @UserDecorator() user: User) {
@@ -29,6 +30,7 @@ export class AvatarController {
     }
 
     @Delete('delete')
+    @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(BearerAuthGuard)
     async deleteAvatar(@UserDecorator() user: User) {
         await this.commandBus.execute(new DeleteAvatarCommand(user.accountData.id));
