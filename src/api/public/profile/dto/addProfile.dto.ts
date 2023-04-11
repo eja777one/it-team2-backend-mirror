@@ -13,7 +13,7 @@ export class AddProfileInputModel {
     @Length(4, 20)
     surname: string;
 
-    @Length(0, 20)
+    @Length(0, 30)
     birthday: string;
 
     @Length(0, 20)

@@ -537,7 +537,7 @@ window.onload = function() {
             }
           },
           "responses": {
-            "200": {
+            "204": {
               "description": ""
             }
           }
@@ -645,6 +645,39 @@ window.onload = function() {
           "tags": [
             "Testing"
           ]
+        }
+      },
+      "/avatar/{userName}": {
+        "get": {
+          "operationId": "AvatarController_getAvatar",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/avatar/upload": {
+        "post": {
+          "operationId": "AvatarController_uploadAvatar",
+          "parameters": [],
+          "responses": {
+            "201": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/avatar/delete": {
+        "delete": {
+          "operationId": "AvatarController_deleteAvatar",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
         }
       }
     },

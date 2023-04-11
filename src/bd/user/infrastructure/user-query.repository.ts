@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../entities/user.schema';
 import { Model } from 'mongoose';
@@ -10,6 +10,11 @@ export class UserQueryRepository {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private jwtService: JwtService) {}
 
     async getUserById(id: string) {
-        return this.userModel.findOne({ id: id });
+        return this.userModel.findOne({ 'accountData.id': id });
+    }
+    async getUserByUserName(userName: string) {
+        const result = await this.userModel.findOne({ 'profileInfo.userName': userName }, { 'accountData.password': 0 });
+        if (!result) throw new NotFoundException();
+        return result;
     }
 }
