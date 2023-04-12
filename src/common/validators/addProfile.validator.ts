@@ -21,6 +21,6 @@ export class AddProfileValidator implements ValidatorConstraintInterface {
     }
 
     defaultMessage(args: ValidationArguments) {
-        return 'This login already in db (User with this login is already registered)';
+        return 'This userName already in db (User with this login is already registered)';
     }
 }

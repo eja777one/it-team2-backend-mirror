@@ -17,4 +17,9 @@ export class UserQueryRepository {
         if (!result) throw new NotFoundException();
         return result;
     }
+    async checkUserNameFromBd(userName: string) {
+        const result = await this.userModel.findOne({ 'profileInfo.userName': userName }, { 'accountData.password': 0 });
+        if (!result) return false;
+        return result;
+    }
 }
