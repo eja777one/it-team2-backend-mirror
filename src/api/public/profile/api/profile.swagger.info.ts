@@ -63,7 +63,7 @@ const profileSchema = {
 };
 
 export const sw_addProfile = {
-    summary: { summary: 'User can edit own profile. User should have access token' },
+    summary: { summary: 'User can add profile. User should have access token' },
     inputSchema: {
         schema: {
             title: 'AddProfileInputModel',
@@ -106,3 +106,27 @@ export const sw_getProfile = {
         description: "User's profile was not found",
     },
 };
+
+export const sw_updateProfile = {
+    summary: { summary: 'User can edit own profile. User should have access token' },
+    inputSchema: {
+        schema: {
+            title: 'UpdateProfileInputModel',
+            type: 'object',
+            properties: profileSchema,
+        },
+    },
+    status200: {
+        status: 200,
+        description: 'Profile was updated',
+    },
+    status400: {
+        status: 400,
+        description: 'Incorrect field(s) in request body',
+        schema: badRequestSchema,
+    },
+    status401: {
+        status: 401,
+        description: 'Check your cookie. Make sure that user is exist',
+    },
+}

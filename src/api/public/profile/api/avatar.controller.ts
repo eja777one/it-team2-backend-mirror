@@ -8,7 +8,9 @@ import { SaveUserAvatarCommand } from '../application/useCases/saveUserAvatarUse
 import { DeleteAvatarCommand } from '../application/useCases/deleteAvatarUseCase';
 import type { Response } from 'express';
 import { GetAvatarCommand } from '../application/useCases/getAvatarUseCase';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Profile')
 @Injectable()
 @Controller('avatar')
 export class AvatarController {

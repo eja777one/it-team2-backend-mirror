@@ -525,7 +525,7 @@ window.onload = function() {
       "/profile/createProfile/{userName}": {
         "post": {
           "operationId": "ProfileController_addProfile",
-          "summary": "User can edit own profile. User should have access token",
+          "summary": "User can add profile. User should have access token",
           "parameters": [],
           "requestBody": {
             "required": true,
@@ -610,6 +610,9 @@ window.onload = function() {
                   }
                 }
               }
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
             }
           },
           "tags": [
@@ -625,24 +628,103 @@ window.onload = function() {
       "/profile/edit/{userName}": {
         "put": {
           "operationId": "ProfileController_updateProfile",
+          "summary": "User can edit own profile. User should have access token",
           "parameters": [],
           "requestBody": {
             "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UpdateProfileInputModel"
+                  "title": "UpdateProfileInputModel",
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string",
+                      "minLength": 4,
+                      "maxLength": 30,
+                      "example": "Harley_Quinn",
+                      "description": "it should be valid userName"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 4,
+                      "maxLength": 20,
+                      "example": "Margo",
+                      "description": "it should be valid name"
+                    },
+                    "surname": {
+                      "type": "string",
+                      "minLength": 4,
+                      "maxLength": 20,
+                      "example": "Robbie",
+                      "description": "it should be valid surname"
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "maxLength": 20,
+                      "example": "02.07.1990"
+                    },
+                    "city": {
+                      "type": "string",
+                      "maxLength": 20,
+                      "example": "Dalby"
+                    },
+                    "aboutMe": {
+                      "type": "string",
+                      "maxLength": 200,
+                      "example": "Famous actress"
+                    }
+                  }
                 }
               }
             }
           },
           "responses": {
-            "204": {
-              "description": ""
+            "200": {
+              "description": "Profile was updated"
+            },
+            "400": {
+              "description": "Incorrect field(s) in request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "errorsMessages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "incorrect name"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "name"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
             }
           },
           "tags": [
             "Profile"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
           ]
         }
       },
@@ -844,7 +926,10 @@ window.onload = function() {
             "200": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Profile"
+          ]
         }
       },
       "/avatar/upload": {
@@ -855,7 +940,10 @@ window.onload = function() {
             "204": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Profile"
+          ]
         }
       },
       "/avatar/delete": {
@@ -866,7 +954,10 @@ window.onload = function() {
             "204": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Profile"
+          ]
         }
       }
     },
@@ -891,12 +982,7 @@ window.onload = function() {
           "name": "refreshToken"
         }
       },
-      "schemas": {
-        "UpdateProfileInputModel": {
-          "type": "object",
-          "properties": {}
-        }
-      }
+      "schemas": {}
     }
   },
   "customOptions": {}
