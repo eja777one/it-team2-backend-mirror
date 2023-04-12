@@ -1,8 +1,7 @@
 import { Length } from 'class-validator';
 import { CheckUserNameFromDB } from '../../../../common/decorators/addProfile.decorator';
 
-export class AddProfileInputModel {
-    @CheckUserNameFromDB()
+export class UpdateProfileInputModel {
     @Length(4, 30)
     userName: string;
 

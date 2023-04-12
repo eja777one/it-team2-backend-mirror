@@ -522,8 +522,8 @@ window.onload = function() {
           ]
         }
       },
-      "/profile/edit/{userName}": {
-        "put": {
+      "/profile/createProfile/{userName}": {
+        "post": {
           "operationId": "ProfileController_addProfile",
           "summary": "User can edit own profile. User should have access token",
           "parameters": [],
@@ -619,6 +619,30 @@ window.onload = function() {
             {
               "bearer": []
             }
+          ]
+        }
+      },
+      "/profile/edit/{userName}": {
+        "put": {
+          "operationId": "ProfileController_updateProfile",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProfileInputModel"
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Profile"
           ]
         }
       },
@@ -867,7 +891,12 @@ window.onload = function() {
           "name": "refreshToken"
         }
       },
-      "schemas": {}
+      "schemas": {
+        "UpdateProfileInputModel": {
+          "type": "object",
+          "properties": {}
+        }
+      }
     }
   },
   "customOptions": {}

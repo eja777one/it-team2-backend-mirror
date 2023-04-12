@@ -34,7 +34,7 @@ import { PasswordRecoveryCodeUseCase } from './api/public/auth/application/useCa
 import { TestsController } from './test/test.controller';
 import { ProfileController } from './api/public/profile/api/profile.controller';
 import { AddProfileValidator } from './common/validators/addProfile.validator';
-import { EditProfileUseCase } from './api/public/profile/application/useCases/editProfileUseCase';
+import { AddProfileUseCase } from './api/public/profile/application/useCases/addProfileUseCase';
 import { UserQueryRepository } from './bd/user/infrastructure/user-query.repository';
 import { QueryProfileController } from './api/public/profile/api/queryProfile.controller';
 import { QueryProfileService } from './api/public/profile/application/profile.service';
@@ -44,6 +44,7 @@ import { SaveUserAvatarCommandUseCase } from './api/public/profile/application/u
 import { FileStorageAdapter } from './common/adapter/fileStorageAdapterService';
 import { DeleteAvatarCommandUseCase } from './api/public/profile/application/useCases/deleteAvatarUseCase';
 import { GetAvatarCommandUseCase } from './api/public/profile/application/useCases/getAvatarUseCase';
+import { EditProfileUseCase } from './api/public/profile/application/useCases/editProfileUseCase';
 
 const controller = [AppController, AuthController, ProfileController, QueryProfileController, TestsController, AvatarController];
 const service = [AppService, EmailService, AuthService, QueryProfileService, JwtAdapter, JwtService, FileStorageAdapter];
@@ -60,9 +61,10 @@ const useCases = [
     RegistrationConfirmUseCase,
     ResentEmailUseCase,
     PasswordRecoveryCodeUseCase,
-    EditProfileUseCase,
+    AddProfileUseCase,
     SaveUserAvatarCommandUseCase,
     DeleteAvatarCommandUseCase,
+    EditProfileUseCase,
     GetAvatarCommandUseCase,
 ];
 const strategy = [LocalStrategy];

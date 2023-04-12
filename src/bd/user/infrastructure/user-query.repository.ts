@@ -10,7 +10,7 @@ export class UserQueryRepository {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private jwtService: JwtService) {}
 
     async getUserById(id: string) {
-        return this.userModel.findOne({ 'accountData.id': id });
+        return this.userModel.findOne({ 'accountData.id': id }, { 'accountData.password': 0 });
     }
     async getUserByUserName(userName: string) {
         const result = await this.userModel.findOne({ 'profileInfo.userName': userName }, { 'accountData.password': 0 });

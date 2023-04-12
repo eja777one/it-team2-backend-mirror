@@ -13,7 +13,6 @@ export class QueryProfileController {
     constructor(private commandBus: CommandBus, protected queryProfileService: QueryProfileService) {}
 
     @ApiBearerAuth()
-    @UseGuards(BearerAuthGuard)
     @Get(':userName')
     @ApiOperation(sw_getProfile.summary)
     @ApiResponse(sw_getProfile.status200)

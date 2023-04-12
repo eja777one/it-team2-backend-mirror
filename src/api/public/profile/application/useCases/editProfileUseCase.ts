@@ -11,6 +11,11 @@ export class EditProfileCommand {
 export class EditProfileUseCase implements ICommandHandler<EditProfileCommand> {
     constructor(protected userQueryRepository: UserQueryRepository, protected userRepository: UserRepository) {}
     async execute(command: EditProfileCommand) {
-        const addProfile = await this.userRepository.updateUserProfileInfo(command.inputModel, command.user.accountData.id);
+        if (command.user.profileInfo.userName === command.inputModel.userName) {
+            const editProfile = await this.userRepository.updateUserProfileInfo(command.inputModel, command.user.accountData.id);
+            return editProfile;
+        }
+        const editProfile = await this.userRepository.updateUserProfileInfo(command.inputModel, command.user.accountData.id);
+        return editProfile;
     }
 }
