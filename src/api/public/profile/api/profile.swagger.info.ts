@@ -71,8 +71,8 @@ export const sw_addProfile = {
             properties: profileSchema,
         },
     },
-    status200: {
-        status: 200,
+    status204: {
+        status: 204,
         description: 'Profile was added to user',
     },
     status400: {
@@ -87,19 +87,24 @@ export const sw_addProfile = {
 };
 
 export const sw_getProfile = {
-    summary: { summary: 'User can get own profile. User should have access token' },
+    summary: { summary: 'User can get own profile' },
     status200: {
         status: 200,
         description: 'Profile was sent to user',
         schema: {
-            title: 'AddProfileInputModel',
+            title: 'ProfileViewModel',
             type: 'object',
-            properties: profileSchema,
+            properties: {
+                _id: {
+                    type: 'string',
+                    example: '643a7e839d20aa10bbd2ffb9'
+                },
+                profileInfo: {
+                    type: 'object',
+                    properties: profileSchema
+                }
+            },
         },
-    },
-    status401: {
-        status: 401,
-        description: 'Check your cookie. Make sure that user is exist',
     },
     status404: {
         status: 404,
@@ -129,4 +134,40 @@ export const sw_updateProfile = {
         status: 401,
         description: 'Check your cookie. Make sure that user is exist',
     },
-};
+}
+
+export const sw_getFile = {
+    summary: { summary: 'Get user\'s avatar' },
+    status200: {
+        status: 200,
+        description: 'User\'s avatar was recieved',
+    },
+    status404: {
+        status: 404,
+        description: "User's avatar was not found",
+    },
+}
+
+export const sw_uploadAvatar = {
+    summary: { summary: 'User can upload avatar. User should have access token' },
+    status204: {
+        status: 204,
+        description: 'User\'s avatar was upload',
+    },
+    status401: {
+        status: 401,
+        description: 'Check your cookie. Make sure that user is exist',
+    },
+}
+
+export const sw_deleteAvatar = {
+    summary: { summary: 'User can delete avatar. User should have access token' },
+    status204: {
+        status: 204,
+        description: 'User\'s avatar was deleted',
+    },
+    status401: {
+        status: 401,
+        description: 'Check your cookie. Make sure that user is exist',
+    },
+}

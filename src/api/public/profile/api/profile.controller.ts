@@ -22,7 +22,7 @@ export class ProfileController {
     @Post('createProfile/:userName')
     @ApiOperation(sw_addProfile.summary)
     @ApiBody(sw_addProfile.inputSchema)
-    @ApiResponse(sw_addProfile.status200)
+    @ApiResponse(sw_addProfile.status204)
     @ApiResponse(sw_addProfile.status400)
     @ApiResponse(sw_addProfile.status401)
     async addProfile(@UserDecorator() user: User, @Body() inputModel: AddProfileInputModel, @Param('userName') userName) {

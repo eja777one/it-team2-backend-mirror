@@ -116,9 +116,9 @@ export class AuthController {
     }
 
     @ApiCookieAuth()
-    @UseGuards(CookieGuard)
     @HttpCode(HttpStatus.OK)
     @Post('refresh-token')
+    @UseGuards(CookieGuard)
     @ApiOperation(sw_refreshToken.summary)
     @ApiResponse(sw_refreshToken.status200)
     @ApiResponse(sw_refreshToken.status401)

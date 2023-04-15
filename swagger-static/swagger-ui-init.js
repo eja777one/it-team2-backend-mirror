@@ -32,6 +32,10 @@ window.onload = function() {
                       "userId": {
                         "type": "string",
                         "example": "642b57873fd3241964fef9aa"
+                      },
+                      "userName": {
+                        "type": "string",
+                        "example": "powerMan"
                       }
                     }
                   }
@@ -65,6 +69,13 @@ window.onload = function() {
                   "title": "CreateUserInputModelType",
                   "type": "object",
                   "properties": {
+                    "userName": {
+                      "type": "string",
+                      "example": "powerMan",
+                      "description": "it should be valid userName",
+                      "minLength": 4,
+                      "maxLength": 30
+                    },
                     "email": {
                       "type": "string",
                       "example": "powerful@gmail.com",
@@ -577,7 +588,7 @@ window.onload = function() {
             }
           },
           "responses": {
-            "200": {
+            "204": {
               "description": "Profile was added to user"
             },
             "400": {
@@ -731,7 +742,7 @@ window.onload = function() {
       "/queryProfile/{userName}": {
         "get": {
           "operationId": "QueryProfileController_getProfile",
-          "summary": "User can get own profile. User should have access token",
+          "summary": "User can get own profile",
           "parameters": [],
           "responses": {
             "200": {
@@ -739,52 +750,58 @@ window.onload = function() {
               "content": {
                 "application/json": {
                   "schema": {
-                    "title": "AddProfileInputModel",
+                    "title": "ProfileViewModel",
                     "type": "object",
                     "properties": {
-                      "userName": {
+                      "_id": {
                         "type": "string",
-                        "minLength": 4,
-                        "maxLength": 30,
-                        "example": "Harley_Quinn",
-                        "description": "it should be valid userName"
+                        "example": "643a7e839d20aa10bbd2ffb9"
                       },
-                      "name": {
-                        "type": "string",
-                        "minLength": 4,
-                        "maxLength": 20,
-                        "example": "Margo",
-                        "description": "it should be valid name"
-                      },
-                      "surname": {
-                        "type": "string",
-                        "minLength": 4,
-                        "maxLength": 20,
-                        "example": "Robbie",
-                        "description": "it should be valid surname"
-                      },
-                      "birthday": {
-                        "type": "string",
-                        "maxLength": 20,
-                        "example": "02.07.1990"
-                      },
-                      "city": {
-                        "type": "string",
-                        "maxLength": 20,
-                        "example": "Dalby"
-                      },
-                      "aboutMe": {
-                        "type": "string",
-                        "maxLength": 200,
-                        "example": "Famous actress"
+                      "profileInfo": {
+                        "type": "object",
+                        "properties": {
+                          "userName": {
+                            "type": "string",
+                            "minLength": 4,
+                            "maxLength": 30,
+                            "example": "Harley_Quinn",
+                            "description": "it should be valid userName"
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 4,
+                            "maxLength": 20,
+                            "example": "Margo",
+                            "description": "it should be valid name"
+                          },
+                          "surname": {
+                            "type": "string",
+                            "minLength": 4,
+                            "maxLength": 20,
+                            "example": "Robbie",
+                            "description": "it should be valid surname"
+                          },
+                          "birthday": {
+                            "type": "string",
+                            "maxLength": 20,
+                            "example": "02.07.1990"
+                          },
+                          "city": {
+                            "type": "string",
+                            "maxLength": 20,
+                            "example": "Dalby"
+                          },
+                          "aboutMe": {
+                            "type": "string",
+                            "maxLength": 200,
+                            "example": "Famous actress"
+                          }
+                        }
                       }
                     }
                   }
                 }
               }
-            },
-            "401": {
-              "description": "Check your cookie. Make sure that user is exist"
             },
             "404": {
               "description": "User's profile was not found"
@@ -792,11 +809,6 @@ window.onload = function() {
           },
           "tags": [
             "Profile"
-          ],
-          "security": [
-            {
-              "bearer": []
-            }
           ]
         }
       },
@@ -921,10 +933,14 @@ window.onload = function() {
       "/avatar/{userName}": {
         "get": {
           "operationId": "AvatarController_getFile",
+          "summary": "Get user's avatar",
           "parameters": [],
           "responses": {
             "200": {
-              "description": ""
+              "description": "User's avatar was recieved"
+            },
+            "404": {
+              "description": "User's avatar was not found"
             }
           },
           "tags": [
@@ -935,28 +951,46 @@ window.onload = function() {
       "/avatar/upload": {
         "post": {
           "operationId": "AvatarController_uploadAvatar",
+          "summary": "User can upload avatar. User should have access token",
           "parameters": [],
           "responses": {
             "204": {
-              "description": ""
+              "description": "User's avatar was upload"
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
             }
           },
           "tags": [
             "Profile"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
           ]
         }
       },
       "/avatar/delete": {
         "delete": {
           "operationId": "AvatarController_deleteAvatar",
+          "summary": "User can delete avatar. User should have access token",
           "parameters": [],
           "responses": {
             "204": {
-              "description": ""
+              "description": "User's avatar was deleted"
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
             }
           },
           "tags": [
             "Profile"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
           ]
         }
       }
