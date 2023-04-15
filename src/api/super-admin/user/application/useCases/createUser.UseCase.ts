@@ -35,6 +35,7 @@ export class createUserUseCase implements ICommandHandler<CreateUserCommand> {
                 birthday: '',
                 city: '',
                 aboutMe: '',
+                linkAvatar: '',
             },
         };
         const sendEmail = await this.emailService.sendEmail(newUser.accountData.email, 'Registr', newUser.emailConfirmation.confirmationCode);

@@ -129,4 +129,4 @@ export const sw_updateProfile = {
         status: 401,
         description: 'Check your cookie. Make sure that user is exist',
     },
-}
+};

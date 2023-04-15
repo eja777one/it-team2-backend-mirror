@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import AWS from 'aws-sdk';
 
 @Injectable()
 export class FileStorageAdapter {
@@ -17,18 +18,19 @@ export class FileStorageAdapter {
     }
 
     async getAvatar(userId) {
-        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}_.jpg` };
+        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}/avatar/avatar_.jpg` };
         try {
-            const command = new GetObjectCommand(bucketParams);
-            const response = await this.S3Client.send(command);
-            return response.Body;
+            return `https://storage.yandexcloud.net/${bucketParams.Bucket}/inctagram-backet/${bucketParams.Key}`;
+            // const command = new GetObjectCommand(bucketParams);
+            // const response = await this.S3Client.send(command);
+            // return response.Body;
         } catch (e) {
             console.log(e);
         }
     }
 
     async saveAvatar(userId: string, originalName: string, buffer: Buffer) {
-        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}_.jpg`, Body: buffer, ContentType: 'images/jpg' };
+        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}/avatar/avatar_.jpg`, Body: buffer, ContentType: 'images/jpg' };
 
         const command = new PutObjectCommand(bucketParams);
 
@@ -43,8 +45,7 @@ export class FileStorageAdapter {
         };
     }
     async deleteAvatar(userId: string) {
-        console.log('tyt');
-        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}_.jpg` };
+        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}/avatar/avatar_.jpg` };
         try {
             const deleteAvatar = await this.S3Client.send(new DeleteObjectCommand(bucketParams));
         } catch (e) {
@@ -52,3 +53,25 @@ export class FileStorageAdapter {
         }
     }
 }
+
+//const AWS = require('aws-sdk');
+//
+// // Set your Yandex Cloud credentials
+// const s3 = new AWS.S3({
+//     accessKeyId: 'YOUR_ACCESS_KEY_ID',
+//     secretAccessKey: 'YOUR_SECRET_ACCESS_KEY',
+//     region: 'YOUR_REGION'
+// });
+//
+// // Set the name of the bucket and the key of the image
+// const bucketName = 'YOUR_BUCKET_NAME';
+// const imageKey = 'YOUR_IMAGE_KEY';
+//
+// // Get the URL of the image
+// const url = s3.getSignedUrl('getObject', {
+//     Bucket: bucketName,
+//     Key: imageKey,
+//     Expires: 3600 // The URL will expire in 1 hour
+// });
+//
+// console.log(url); // Output the URL to the console

@@ -10,10 +10,43 @@ export class EmailService {
                 from: '"RUSEL" <heeca@mail.ru>', // sender address
                 to: email,
                 subject: subject,
-                html: `<h1>Thank for your registration</h1>
-                        <p>To finish registration please follow the link below: eto cod => ${confirmationCode} a eto net =>
-                             <a href='https://instagram-frontend-theta.vercel.app/auth/registration/registration-confirmation?code=${confirmationCode}'>complete registration</a>
-                        </p>`,
+                html: `<table style="margin:0 auto;" >
+                        <tr>
+                              <h3 style="text-align: center">Thank for your registration</h3>
+                        </tr>
+                        <tr>
+                        <img class="img" 
+                         style="margin: 0 auto; 
+                         display: block;
+                         width: 150px;
+                         height:150px"
+                         src="https://img.freepik.com/premium-vector/ready-use-animated-design-media-content_9206-3956.jpg?w=2000"/>
+                         </tr>
+                         <tr style="text-align: center;">
+                         <p 
+                         style="font-size: 20px;
+                         text-align: center">
+                         Please click on the button below to verify your email</p>
+                          </tr>
+                         <tr style="align-items: center">
+                         <a href='https://frontend-monorepo-mirror-workshop.vercel.app/auth/registration/registration-confirmation?code=${confirmationCode}' 
+                            style="
+                            margin-top:10px;
+                            background-color:#5571e9;
+                            text-decoration:none;
+                            padding: 10px;
+                            border-radius: 5px;
+                            color: white;
+                            text-align: center;
+                            width: 250px;
+                             margin: 0 auto; 
+                         display: block;
+                         ">
+                          Confirm your email
+                        </a>
+                        </tr>
+                        
+           </table>`,
             });
             return true;
         } catch (e) {
@@ -27,10 +60,43 @@ export class EmailService {
                 from: '"RUSEL" <heeca@mail.ru>', // sender address
                 to: email,
                 subject: subject,
-                html: `<h1>You recovery code</h1>
-                        <p>To finish recoveryPassword: eto cod =>  ${NewRecoveryCode} a eto net =>
-                                 <a href='https://instagram-frontend-theta.vercel.app/auth/new-password?code=${NewRecoveryCode}'>recovery password</a>
-                        </p>`,
+                html: `<table style="margin:0 auto;" >
+                        <tr>
+                              <h3 style="text-align: center">Recovery password</h3>
+                        </tr>
+                        <tr>
+                        <img class="img" 
+                         style="margin: 0 auto; 
+                         display: block;
+                         width: 150px;
+                         height:150px"
+                         src="https://img.freepik.com/premium-vector/ready-use-animated-design-media-content_9206-3956.jpg?w=2000"/>
+                         </tr>
+                         <tr style="text-align: center;">
+                         <p 
+                         style="font-size: 20px;
+                         text-align: center">
+                         Please click on the button below to verify your email</p>
+                          </tr>
+                         <tr style="align-items: center">
+                         <a href='https://frontend-monorepo-mirror-workshop.vercel.app/auth/new-password?code=${NewRecoveryCode}' 
+                            style="
+                            margin-top:10px;
+                            background-color:#5571e9;
+                            text-decoration:none;
+                            padding: 10px;
+                            border-radius: 5px;
+                            color: white;
+                            text-align: center;
+                            width: 250px;
+                             margin: 0 auto; 
+                         display: block;
+                         ">
+                          Confirm your email
+                        </a>
+                        </tr>
+                        
+           </table>`,
             });
             return true;
         } catch (e) {
@@ -38,3 +104,5 @@ export class EmailService {
         }
     }
 }
+//  <a href='https://frontend-monorepo-mirror-workshop.vercel.app/auth/registration/registration-confirmation?code=${confirmationCode}'>complete registration</a>
+//  <a href='https://frontend-monorepo-mirror-workshop.vercel.app/auth/new-password?code=${NewRecoveryCode}'>recovery password</a>

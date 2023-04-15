@@ -39,6 +39,8 @@ class ProfileInfo {
     city: string;
     @Prop()
     aboutMe: string;
+    @Prop()
+    linkAvatar: string;
 }
 
 @Schema()

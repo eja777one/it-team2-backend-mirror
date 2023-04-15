@@ -103,4 +103,16 @@ export class UserRepository {
         const result = await this.userModel.find({});
         return result;
     }
+
+    async saveAvatarFromDb(userId: string) {
+        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}/avatar/avatar_.jpg` };
+        const result = await this.userModel.updateOne(
+            { 'accountData.id': userId },
+            { 'profileInfo.linkAvatar': `https://storage.yandexcloud.net/${bucketParams.Bucket}/inctagram-backet/${bucketParams.Key}` },
+        );
+    }
+
+    async deleteAvatarFromDb(userId: string) {
+        const result = await this.userModel.updateOne({ 'accountData.id': userId }, { 'profileInfo.linkAvatar': '' });
+    }
 }

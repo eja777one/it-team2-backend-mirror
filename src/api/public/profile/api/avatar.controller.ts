@@ -1,4 +1,19 @@
-import { Controller, Delete, Get, HttpCode, HttpStatus, Injectable, Param, Post, Res, StreamableFile, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+    BadRequestException,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Injectable,
+    Param,
+    Post,
+    Res,
+    StreamableFile,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
@@ -8,7 +23,7 @@ import { SaveUserAvatarCommand } from '../application/useCases/saveUserAvatarUse
 import { DeleteAvatarCommand } from '../application/useCases/deleteAvatarUseCase';
 import type { Response } from 'express';
 import { GetAvatarCommand } from '../application/useCases/getAvatarUseCase';
-import {ApiTags} from "@nestjs/swagger";
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Profile')
 @Injectable()
@@ -18,10 +33,12 @@ export class AvatarController {
 
     @Get(':userName')
     async getFile(@Res({ passthrough: true }) res: Response, @Param('userName') userName) {
-        const buffer = await this.commandBus.execute(new GetAvatarCommand(userName));
-        for await (const chunk of buffer) {
-            res.write(chunk);
-        }
+        const url = await this.commandBus.execute(new GetAvatarCommand(userName));
+        return url;
+        // const buffer = await this.commandBus.execute(new GetAvatarCommand(userName));
+        // for await (const chunk of buffer) {
+        //     res.write(chunk);
+        // }
     }
 
     @Post('upload')
@@ -29,6 +46,7 @@ export class AvatarController {
     @UseInterceptors(FileInterceptor('file'))
     @UseGuards(BearerAuthGuard)
     async uploadAvatar(@UploadedFile() avatarFile: Express.Multer.File, @UserDecorator() user: User) {
+        if (!avatarFile) throw new BadRequestException([{ message: 'Search photo', field: 'file' }]);
         await this.commandBus.execute(new SaveUserAvatarCommand(user.accountData.id, avatarFile.originalname, avatarFile.buffer));
     }
 
