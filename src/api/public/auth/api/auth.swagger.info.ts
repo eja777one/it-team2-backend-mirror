@@ -103,7 +103,7 @@ const userAuthMeSchema = {
         userName: {
             type: 'string',
             example: 'powerMan',
-        }
+        },
     },
 };
 

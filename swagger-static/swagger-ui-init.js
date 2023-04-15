@@ -933,14 +933,10 @@ window.onload = function() {
       "/avatar/{userName}": {
         "get": {
           "operationId": "AvatarController_getFile",
-          "summary": "Get user's avatar",
           "parameters": [],
           "responses": {
             "200": {
-              "description": "User's avatar was recieved"
-            },
-            "404": {
-              "description": "User's avatar was not found"
+              "description": ""
             }
           },
           "tags": [
@@ -951,46 +947,28 @@ window.onload = function() {
       "/avatar/upload": {
         "post": {
           "operationId": "AvatarController_uploadAvatar",
-          "summary": "User can upload avatar. User should have access token",
           "parameters": [],
           "responses": {
             "204": {
-              "description": "User's avatar was upload"
-            },
-            "401": {
-              "description": "Check your cookie. Make sure that user is exist"
+              "description": ""
             }
           },
           "tags": [
             "Profile"
-          ],
-          "security": [
-            {
-              "bearer": []
-            }
           ]
         }
       },
       "/avatar/delete": {
         "delete": {
           "operationId": "AvatarController_deleteAvatar",
-          "summary": "User can delete avatar. User should have access token",
           "parameters": [],
           "responses": {
             "204": {
-              "description": "User's avatar was deleted"
-            },
-            "401": {
-              "description": "Check your cookie. Make sure that user is exist"
+              "description": ""
             }
           },
           "tags": [
             "Profile"
-          ],
-          "security": [
-            {
-              "bearer": []
-            }
           ]
         }
       }

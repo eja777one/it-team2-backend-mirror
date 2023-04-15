@@ -97,12 +97,12 @@ export const sw_getProfile = {
             properties: {
                 _id: {
                     type: 'string',
-                    example: '643a7e839d20aa10bbd2ffb9'
+                    example: '643a7e839d20aa10bbd2ffb9',
                 },
                 profileInfo: {
                     type: 'object',
-                    properties: profileSchema
-                }
+                    properties: profileSchema,
+                },
             },
         },
     },
@@ -134,40 +134,40 @@ export const sw_updateProfile = {
         status: 401,
         description: 'Check your cookie. Make sure that user is exist',
     },
-}
+};
 
 export const sw_getFile = {
-    summary: { summary: 'Get user\'s avatar' },
+    summary: { summary: "Get user's avatar" },
     status200: {
         status: 200,
-        description: 'User\'s avatar was recieved',
+        description: "User's avatar was recieved",
     },
     status404: {
         status: 404,
         description: "User's avatar was not found",
     },
-}
+};
 
 export const sw_uploadAvatar = {
     summary: { summary: 'User can upload avatar. User should have access token' },
     status204: {
         status: 204,
-        description: 'User\'s avatar was upload',
+        description: "User's avatar was upload",
     },
     status401: {
         status: 401,
         description: 'Check your cookie. Make sure that user is exist',
     },
-}
+};
 
 export const sw_deleteAvatar = {
     summary: { summary: 'User can delete avatar. User should have access token' },
     status204: {
         status: 204,
-        description: 'User\'s avatar was deleted',
+        description: "User's avatar was deleted",
     },
     status401: {
         status: 401,
         description: 'Check your cookie. Make sure that user is exist',
     },
-}
+};

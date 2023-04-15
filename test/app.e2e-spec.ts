@@ -1,8 +1,8 @@
-import {Test, TestingModule} from '@nestjs/testing';
-import {HttpStatus, INestApplication} from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import {AppModule} from '../src/app.module';
-import {configNestApp} from '../src/config.main';
+import { AppModule } from '../src/app.module';
+import { configNestApp } from '../src/config.main';
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;
@@ -70,29 +70,29 @@ describe('AuthController (e2e)', () => {
     };
 
     const userProfileInput = {
-        userName: "Harley_Quinn",
-        name: "Margo",
-        surname: "Robbie",
-        birthday: "02.07.1990",
-        city: "Dalby",
-        aboutMe: "Famous actress"
+        userName: 'Harley_Quinn',
+        name: 'Margo',
+        surname: 'Robbie',
+        birthday: '02.07.1990',
+        city: 'Dalby',
+        aboutMe: 'Famous actress',
     };
 
     const userUpdateProfileInput = {
-        userName: "Harley_Quinn",
-        name: "Margo",
-        surname: "Robbie",
-        birthday: "02.07.1990",
-        city: "Dalby",
-        aboutMe: "I play Harley Quinn in the Suicide Squad movie"
+        userName: 'Harley_Quinn',
+        name: 'Margo',
+        surname: 'Robbie',
+        birthday: '02.07.1990',
+        city: 'Dalby',
+        aboutMe: 'I play Harley Quinn in the Suicide Squad movie',
     };
 
     const badUserProfileInput = {
-        userName: "Harley_Quinn",
-        surname: "Robbie",
-        birthday: "02.07.1990",
-        city: "Dalby",
-        aboutMe: "Famous actress"
+        userName: 'Harley_Quinn',
+        surname: 'Robbie',
+        birthday: '02.07.1990',
+        city: 'Dalby',
+        aboutMe: 'Famous actress',
     };
 
     const userProfileInputError = {
@@ -163,7 +163,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #05
     it('Resend email confirmCode. Status 204', async () => {
-        const response = await request(app.getHttpServer()).post(`/auth/registration-email-resending`).send({email: userInput.email});
+        const response = await request(app.getHttpServer()).post(`/auth/registration-email-resending`).send({ email: userInput.email });
 
         const result = response.body;
 
@@ -183,7 +183,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #06
     it("Activate user's account. Incorrect confirmCode. Status 400", async () => {
-        const response = await request(app.getHttpServer()).post(`/auth/registration-confirmation`).send({code: '123'});
+        const response = await request(app.getHttpServer()).post(`/auth/registration-confirmation`).send({ code: '123' });
 
         const result = response.body;
 
@@ -194,7 +194,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #07
     it("Activate user's account. Status 204", async () => {
-        const response = await request(app.getHttpServer()).post(`/auth/registration-confirmation`).send({code: userConfirmCode});
+        const response = await request(app.getHttpServer()).post(`/auth/registration-confirmation`).send({ code: userConfirmCode });
 
         const result = response.body;
 
@@ -206,7 +206,7 @@ describe('AuthController (e2e)', () => {
     it("User can't login. Wrong password. Status 401", async () => {
         const response = await request(app.getHttpServer()).post(`/auth/login`).send({
             email: userInput.email,
-            password: '123'
+            password: '123',
         });
 
         const result = response.body;
@@ -223,7 +223,7 @@ describe('AuthController (e2e)', () => {
 
         expect(response).toBeDefined();
         expect(response.status).toBe(HttpStatus.OK);
-        expect(result).toStrictEqual({accessToken: expect.any(String)});
+        expect(result).toStrictEqual({ accessToken: expect.any(String) });
 
         accessToken = result.accessToken;
         cookie = response.get('Set-Cookie');
@@ -241,15 +241,13 @@ describe('AuthController (e2e)', () => {
 
     // TEST #11
     it('Refresh tokens for users. Status 200', async () => {
-        const response = await request(app.getHttpServer())
-            .post(`/auth/refresh-token`)
-            .set('Cookie', cookie);
+        const response = await request(app.getHttpServer()).post(`/auth/refresh-token`).set('Cookie', cookie);
 
         const result = response.body;
 
         expect(response).toBeDefined();
         expect(response.status).toBe(HttpStatus.OK);
-        expect(result).toStrictEqual({accessToken: expect.any(String)});
+        expect(result).toStrictEqual({ accessToken: expect.any(String) });
 
         accessToken = result.accessToken;
         cookie = response.get('Set-Cookie');
@@ -268,7 +266,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #13
     it('Get recovery code to set new password. Status 204', async () => {
-        const response = await request(app.getHttpServer()).post(`/auth/password-recovery-code`).send({email: userInput.email});
+        const response = await request(app.getHttpServer()).post(`/auth/password-recovery-code`).send({ email: userInput.email });
 
         const result = response.body;
 
@@ -290,7 +288,7 @@ describe('AuthController (e2e)', () => {
     it('Set new password to user. Status 400', async () => {
         const response = await request(app.getHttpServer()).post(`/auth/new-password`).send({
             newPassword: 'qwerty123',
-            recoveryCode: '123'
+            recoveryCode: '123',
         });
 
         const result = response.body;
@@ -304,7 +302,7 @@ describe('AuthController (e2e)', () => {
     it('Set new password to user. Status 204', async () => {
         const response = await request(app.getHttpServer()).post(`/auth/new-password`).send({
             newPassword: 'qwerty123',
-            recoveryCode: passRecoveryCode
+            recoveryCode: passRecoveryCode,
         });
 
         const result = response.body;
@@ -319,7 +317,7 @@ describe('AuthController (e2e)', () => {
     it('User login. Status 401', async () => {
         const response = await request(app.getHttpServer())
             .post(`/auth/login`)
-            .send({...userInput, password: '1234567'});
+            .send({ ...userInput, password: '1234567' });
 
         const result = response.body;
 
@@ -335,7 +333,7 @@ describe('AuthController (e2e)', () => {
 
         expect(response).toBeDefined();
         expect(response.status).toBe(HttpStatus.OK);
-        expect(result).toStrictEqual({accessToken: expect.any(String)});
+        expect(result).toStrictEqual({ accessToken: expect.any(String) });
 
         accessToken = result.accessToken;
         cookie = response.get('Set-Cookie');
@@ -343,9 +341,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #18
     it("Get user's info. Status 401", async () => {
-        const response = await request(app.getHttpServer())
-            .get(`/auth/me`)
-            .set('Authorization', `Bearer {accessToken.accessToken}`);
+        const response = await request(app.getHttpServer()).get(`/auth/me`).set('Authorization', `Bearer {accessToken.accessToken}`);
 
         const result = response.body;
 
@@ -364,7 +360,7 @@ describe('AuthController (e2e)', () => {
         expect(result).toStrictEqual({
             email: userInput.email,
             userId: expect.any(String),
-            userName: userInput.userName
+            userName: userInput.userName,
         });
     });
 
@@ -406,7 +402,7 @@ describe('AuthController (e2e)', () => {
 
         expect(response).toBeDefined();
         expect(response.status).toBe(HttpStatus.OK);
-        expect(result).toStrictEqual({accessToken: expect.any(String)});
+        expect(result).toStrictEqual({ accessToken: expect.any(String) });
 
         accessToken = result.accessToken;
         cookie = response.get('Set-Cookie');
@@ -455,10 +451,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #27
     it('User try to edit profile. Status 401', async () => {
-        const response = await request(app.getHttpServer())
-            .put(`/profile/edit/${userInput.userName}`)
-            .set('Authorization', `Bearer {accessToken}`)
-            .send(userUpdateProfileInput);
+        const response = await request(app.getHttpServer()).put(`/profile/edit/${userInput.userName}`).set('Authorization', `Bearer {accessToken}`).send(userUpdateProfileInput);
 
         const result = response.body;
 
@@ -468,10 +461,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #28
     it('User try to edit profile. Status 400', async () => {
-        const response = await request(app.getHttpServer())
-            .put(`/profile/edit/${userInput.userName}`)
-            .set('Authorization', `Bearer ${accessToken}`)
-            .send(badUserProfileInput);
+        const response = await request(app.getHttpServer()).put(`/profile/edit/${userInput.userName}`).set('Authorization', `Bearer ${accessToken}`).send(badUserProfileInput);
 
         const result = response.body;
 
@@ -482,10 +472,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #29
     it('User edit profile. Status 204', async () => {
-        const response = await request(app.getHttpServer())
-            .put(`/profile/edit/${userInput.userName}`)
-            .set('Authorization', `Bearer ${accessToken}`)
-            .send(userUpdateProfileInput);
+        const response = await request(app.getHttpServer()).put(`/profile/edit/${userInput.userName}`).set('Authorization', `Bearer ${accessToken}`).send(userUpdateProfileInput);
 
         const result = response.body;
 
@@ -495,9 +482,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #30
     it('User try to get profile. Status 404', async () => {
-        const response = await request(app.getHttpServer())
-            .get(`/queryProfile/{userInput.userName}`)
-            .set('Authorization', `Bearer ${accessToken}`)
+        const response = await request(app.getHttpServer()).get(`/queryProfile/{userInput.userName}`).set('Authorization', `Bearer ${accessToken}`);
 
         const result = response.body;
 
@@ -507,9 +492,7 @@ describe('AuthController (e2e)', () => {
 
     // TEST #31
     it('User get profile. Status 200', async () => {
-        const response = await request(app.getHttpServer())
-            .get(`/queryProfile/${userInput.userName}`)
-            .set('Authorization', `Bearer ${accessToken}`)
+        const response = await request(app.getHttpServer()).get(`/queryProfile/${userInput.userName}`).set('Authorization', `Bearer ${accessToken}`);
 
         const result = response.body;
 
@@ -517,7 +500,7 @@ describe('AuthController (e2e)', () => {
         expect(response.status).toBe(HttpStatus.OK);
         expect(result).toStrictEqual({
             _id: expect.any(String),
-            profileInfo: {...userUpdateProfileInput}
+            profileInfo: { ...userUpdateProfileInput },
         });
     });
 });
