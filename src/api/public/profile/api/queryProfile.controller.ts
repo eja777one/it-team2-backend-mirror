@@ -12,11 +12,9 @@ import { sw_addProfile, sw_getProfile } from './profile.swagger.info';
 export class QueryProfileController {
     constructor(private commandBus: CommandBus, protected queryProfileService: QueryProfileService) {}
 
-    @ApiBearerAuth()
     @Get(':userName')
     @ApiOperation(sw_getProfile.summary)
     @ApiResponse(sw_getProfile.status200)
-    @ApiResponse(sw_getProfile.status401)
     @ApiResponse(sw_getProfile.status404)
     async getProfile(@UserDecorator() user: User, @Param('userName') userName) {
         return await this.queryProfileService.getProfile(userName);

@@ -8,7 +8,8 @@ import { SaveUserAvatarCommand } from '../application/useCases/saveUserAvatarUse
 import { DeleteAvatarCommand } from '../application/useCases/deleteAvatarUseCase';
 import type { Response } from 'express';
 import { GetAvatarCommand } from '../application/useCases/getAvatarUseCase';
-import {ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {sw_deleteAvatar, sw_getFile, sw_uploadAvatar} from "./profile.swagger.info";
 
 @ApiTags('Profile')
 @Injectable()
@@ -17,6 +18,9 @@ export class AvatarController {
     constructor(private commandBus: CommandBus) {}
 
     @Get(':userName')
+    @ApiOperation(sw_getFile.summary)
+    @ApiResponse(sw_getFile.status200)
+    @ApiResponse(sw_getFile.status404)
     async getFile(@Res({ passthrough: true }) res: Response, @Param('userName') userName) {
         const buffer = await this.commandBus.execute(new GetAvatarCommand(userName));
         for await (const chunk of buffer) {
@@ -24,17 +28,25 @@ export class AvatarController {
         }
     }
 
-    @Post('upload')
-    @HttpCode(HttpStatus.NO_CONTENT)
-    @UseInterceptors(FileInterceptor('file'))
+    @ApiBearerAuth()
     @UseGuards(BearerAuthGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiOperation(sw_uploadAvatar.summary)
+    @ApiResponse(sw_uploadAvatar.status204)
+    @ApiResponse(sw_uploadAvatar.status401)
     async uploadAvatar(@UploadedFile() avatarFile: Express.Multer.File, @UserDecorator() user: User) {
         await this.commandBus.execute(new SaveUserAvatarCommand(user.accountData.id, avatarFile.originalname, avatarFile.buffer));
     }
 
-    @Delete('delete')
-    @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiBearerAuth()
     @UseGuards(BearerAuthGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Delete('delete')
+    @ApiOperation(sw_deleteAvatar.summary)
+    @ApiResponse(sw_deleteAvatar.status204)
+    @ApiResponse(sw_deleteAvatar.status401)
     async deleteAvatar(@UserDecorator() user: User) {
         await this.commandBus.execute(new DeleteAvatarCommand(user.accountData.id));
     }

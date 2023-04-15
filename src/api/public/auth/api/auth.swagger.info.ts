@@ -100,6 +100,10 @@ const userAuthMeSchema = {
             type: 'string',
             example: '642b57873fd3241964fef9aa',
         },
+        userName: {
+            type: 'string',
+            example: 'powerMan',
+        }
     },
 };
 
@@ -133,6 +137,13 @@ export const sw_regitstration = {
             title: 'CreateUserInputModelType',
             type: 'object',
             properties: {
+                userName: {
+                    type: 'string',
+                    example: 'powerMan',
+                    description: 'it should be valid userName',
+                    minLength: 4,
+                    maxLength: 30,
+                },
                 email: {
                     type: 'string',
                     example: 'powerful@gmail.com',

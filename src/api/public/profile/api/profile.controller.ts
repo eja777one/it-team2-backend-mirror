@@ -22,7 +22,7 @@ export class ProfileController {
     @Post('createProfile/:userName')
     @ApiOperation(sw_addProfile.summary)
     @ApiBody(sw_addProfile.inputSchema)
-    @ApiResponse(sw_addProfile.status200)
+    @ApiResponse(sw_addProfile.status204)
     @ApiResponse(sw_addProfile.status400)
     @ApiResponse(sw_addProfile.status401)
     async addProfile(@UserDecorator() user: User, @Body() inputModel: AddProfileInputModel, @Param('userName') userName) {
@@ -39,8 +39,6 @@ export class ProfileController {
     @ApiResponse(sw_updateProfile.status200)
     @ApiResponse(sw_updateProfile.status400)
     @ApiResponse(sw_updateProfile.status401)
-
-
     async updateProfile(@UserDecorator() user: User, @Body() inputModel: UpdateProfileInputModel, @Param('userName') userName) {
         if (userName != user.profileInfo.userName) throw new UnauthorizedException();
         return await this.commandBus.execute(new EditProfileCommand(user, inputModel));

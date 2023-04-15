@@ -9,7 +9,7 @@ export class ProfileRepository {
 
     async getProfile(userName: string) {
         const result = await this.userModel.findOne({ 'profileInfo.userName': userName }, { profileInfo: 1 });
-        console.log(userName);
+        // console.log(userName);
         if (!result) throw new NotFoundException();
         return result;
     }
