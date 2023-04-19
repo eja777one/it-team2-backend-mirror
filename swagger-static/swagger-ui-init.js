@@ -933,10 +933,14 @@ window.onload = function() {
       "/avatar/{userName}": {
         "get": {
           "operationId": "AvatarController_getFile",
+          "summary": "Get user's avatar",
           "parameters": [],
           "responses": {
             "200": {
-              "description": ""
+              "description": "User's avatar was recieved"
+            },
+            "404": {
+              "description": "User's avatar was not found"
             }
           },
           "tags": [
@@ -947,88 +951,228 @@ window.onload = function() {
       "/avatar/upload": {
         "post": {
           "operationId": "AvatarController_uploadAvatar",
+          "summary": "User can upload avatar. User should have access token",
           "parameters": [],
           "responses": {
             "204": {
-              "description": ""
+              "description": "User's avatar was upload"
+            },
+            "400": {
+              "description": "Incorrect field(s) in request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "errorsMessages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "Search photo"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "file"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
             }
           },
           "tags": [
             "Profile"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
           ]
         }
       },
       "/avatar/delete": {
         "delete": {
           "operationId": "AvatarController_deleteAvatar",
+          "summary": "User can delete avatar. User should have access token",
           "parameters": [],
           "responses": {
             "204": {
-              "description": ""
+              "description": "User's avatar was deleted"
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
             }
           },
           "tags": [
             "Profile"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
           ]
         }
       },
       "/post/createPost": {
         "post": {
           "operationId": "PostController_createPost",
+          "summary": "User can add Post. User should have access token",
           "parameters": [],
           "requestBody": {
             "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreatePostInputModel"
+                  "title": "CreatePostInputModel",
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "example": "Hello! It is my first post $)",
+                      "description": "it should be valid content",
+                      "minLength": 4,
+                      "maxLength": 30
+                    }
+                  }
                 }
               }
             }
           },
           "responses": {
-            "201": {
-              "description": ""
+            "200": {
+              "description": "User's post was created"
+            },
+            "400": {
+              "description": "Incorrect field(s) in request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "APIResultError",
+                    "type": "object",
+                    "properties": {
+                      "errorsMessages": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "description": "any error message",
+                              "example": "incorrect content"
+                            },
+                            "field": {
+                              "type": "string",
+                              "description": "it should be incorrect field from request body",
+                              "example": "content"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist"
+            },
+            "429": {
+              "description": "More than 5 requests for 10 seconds"
             }
-          }
+          },
+          "tags": [
+            "Posts"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
         }
       },
       "/post/allPosts": {
         "get": {
-          "operationId": "PostController_getPost",
+          "operationId": "PostController_getPosts",
+          "summary": "User can get all Posts",
           "parameters": [],
           "responses": {
             "200": {
-              "description": ""
+              "description": "Posts was recieved"
             }
-          }
+          },
+          "tags": [
+            "Posts"
+          ]
         }
       },
       "/post/{id}": {
         "get": {
           "operationId": "PostController_getPostById",
-          "parameters": [],
+          "summary": "User can get Post by id",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
           "responses": {
             "200": {
-              "description": ""
+              "description": "Post was recieved"
+            },
+            "404": {
+              "description": "Post was not found"
             }
-          }
+          },
+          "tags": [
+            "Posts"
+          ]
         },
         "delete": {
           "operationId": "PostController_deletePost",
+          "summary": "User can delete own Post by id",
           "parameters": [],
           "responses": {
-            "200": {
-              "description": ""
+            "204": {
+              "description": "Post was deleted"
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist. User can delete only own posts"
+            },
+            "404": {
+              "description": "Post was not found"
             }
-          }
+          },
+          "tags": [
+            "Posts"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
         }
       }
     },
     "info": {
       "title": "Inctagram API",
       "description": "Powerfull team should use this api to develop the best Inctagramm app.\nBase URL is https://it-team2-backend-mirror.vercel.app",
-      "version": "03_week",
+      "version": "04_week",
       "contact": {}
     },
     "tags": [],
@@ -1046,12 +1190,7 @@ window.onload = function() {
           "name": "refreshToken"
         }
       },
-      "schemas": {
-        "CreatePostInputModel": {
-          "type": "object",
-          "properties": {}
-        }
-      }
+      "schemas": {}
     }
   },
   "customOptions": {}

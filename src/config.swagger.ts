@@ -10,7 +10,7 @@ const serverUrl = 'http://localhost:5000';
 export const swaggerConfig = new DocumentBuilder()
     .setTitle('Inctagram API')
     .setDescription(description)
-    .setVersion('03_week')
+    .setVersion('04_week')
     .addBearerAuth()
     .addCookieAuth('refreshToken')
     .build();

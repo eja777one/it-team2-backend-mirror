@@ -1,4 +1,4 @@
-const resStatus429 = {
+export const resStatus429 = {
     status: 429,
     description: 'More than 5 requests for 10 seconds',
 };

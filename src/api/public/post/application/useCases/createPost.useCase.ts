@@ -11,10 +11,12 @@ export class CreatePostCommand {
 export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
     constructor(protected postRepository: PostRepository, protected fileStorageAdapter: FileStorageAdapter) {}
     async execute(command: CreatePostCommand) {
+        console.log(command.user)
         const newPost = {
             id: new Date().valueOf().toString(),
             photo: [],
             userId: command.user.accountData.id,
+            userName: command.user.profileInfo.userName,
             createdAt: new Date(),
             content: command.inputModel.content,
         };
