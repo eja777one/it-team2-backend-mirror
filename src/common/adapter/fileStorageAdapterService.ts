@@ -52,6 +52,29 @@ export class FileStorageAdapter {
             console.log('Удаление не прошло');
         }
     }
+
+    async savePostPhoto(userId: string, originalName: any, buffer: any, i: number, postId: string) {
+        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}/post/${postId}/${i}post_.jpg`, Body: buffer, ContentType: 'images/jpg' };
+
+        const command = new PutObjectCommand(bucketParams);
+
+        try {
+            const uploadResult = await this.S3Client.send(command);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    async deletePostPhoto(userId: string, postId: string, i: number) {
+        console.log(userId);
+        const bucketParams = { Bucket: 'inctagram-backet', Key: `${userId}/post/${postId}/${i}post_.jpg` };
+        const bucketParamsDeleteFolder = { Bucket: 'inctagram-backet', Key: `${userId}/post/${postId}` };
+        try {
+            const deletePostPhoto = await this.S3Client.send(new DeleteObjectCommand(bucketParams));
+            await this.S3Client.send(new DeleteObjectCommand(bucketParamsDeleteFolder));
+        } catch (e) {
+            console.log('Удаление не прошло');
+        }
+    }
 }
 
 //const AWS = require('aws-sdk');

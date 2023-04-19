@@ -45,10 +45,16 @@ import { FileStorageAdapter } from './common/adapter/fileStorageAdapterService';
 import { DeleteAvatarCommandUseCase } from './api/public/profile/application/useCases/deleteAvatarUseCase';
 import { GetAvatarCommandUseCase } from './api/public/profile/application/useCases/getAvatarUseCase';
 import { EditProfileUseCase } from './api/public/profile/application/useCases/editProfileUseCase';
+import { Post, PostSchema } from './api/public/post/application/entities/post.schema';
+import { PostRepository } from './api/public/post/infrastructure/post.repository';
+import { PostController } from './api/public/post/api/post.controller ';
+import { CreatePostUseCase } from './api/public/post/application/useCases/createPost.useCase';
+import { PostQueryService } from './api/public/post/application/post.query.service';
+import { DeletePostUseCase } from './api/public/post/application/useCases/deletePost.useCase';
 
-const controller = [AppController, AuthController, ProfileController, QueryProfileController, TestsController, AvatarController];
-const service = [AppService, EmailService, AuthService, QueryProfileService, JwtAdapter, JwtService, FileStorageAdapter];
-const repository = [UserRepository, SessionRepository, UserQueryRepository, ProfileRepository];
+const controller = [AppController, AuthController, ProfileController, QueryProfileController, TestsController, AvatarController, PostController];
+const service = [AppService, EmailService, AuthService, QueryProfileService, JwtAdapter, JwtService, FileStorageAdapter, PostQueryService];
+const repository = [UserRepository, SessionRepository, UserQueryRepository, ProfileRepository, PostRepository];
 const validators = [AddProfileValidator, IsEmailInInDBValidator, ResendEmailValidator, PasswordRecoveryValidators, PasswordRecoveryValidators];
 const useCases = [
     createUserUseCase,
@@ -66,6 +72,8 @@ const useCases = [
     DeleteAvatarCommandUseCase,
     EditProfileUseCase,
     GetAvatarCommandUseCase,
+    DeletePostUseCase,
+    CreatePostUseCase,
 ];
 const strategy = [LocalStrategy];
 
@@ -90,6 +98,7 @@ const strategy = [LocalStrategy];
         MongooseModule.forFeature([
             { name: User.name, schema: UserSchema },
             { name: Session.name, schema: SessionSchema },
+            { name: Post.name, schema: PostSchema },
         ]),
     ],
     controllers: [...controller],

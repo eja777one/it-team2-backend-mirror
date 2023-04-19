@@ -971,6 +971,58 @@ window.onload = function() {
             "Profile"
           ]
         }
+      },
+      "/post/createPost": {
+        "post": {
+          "operationId": "PostController_createPost",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePostInputModel"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/post/allPosts": {
+        "get": {
+          "operationId": "PostController_getPost",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/post/{id}": {
+        "get": {
+          "operationId": "PostController_getPostById",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        },
+        "delete": {
+          "operationId": "PostController_deletePost",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
       }
     },
     "info": {
@@ -994,7 +1046,12 @@ window.onload = function() {
           "name": "refreshToken"
         }
       },
-      "schemas": {}
+      "schemas": {
+        "CreatePostInputModel": {
+          "type": "object",
+          "properties": {}
+        }
+      }
     }
   },
   "customOptions": {}

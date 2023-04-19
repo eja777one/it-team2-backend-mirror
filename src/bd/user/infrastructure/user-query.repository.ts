@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../entities/user.schema';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
-import { add } from 'date-fns';
 
 @Injectable()
 export class UserQueryRepository {
