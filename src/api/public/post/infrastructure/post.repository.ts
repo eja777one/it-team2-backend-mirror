@@ -10,15 +10,16 @@ export class PostRepository {
     }
 
     async createPost(newPost: { id: string; userId: string; content: string }) {
-        return this.postModel.create(newPost);
+        const post = await this.postModel.create(newPost);
+        return post._id;
     }
 
     async getAllPosts() {
-        return this.postModel.find({}).sort({createdAt: -1});
+        return this.postModel.find({}, {id: 0, userId: 0, __v: 0}).sort({createdAt: -1});
     }
 
     async getPostById(id: string) {
-        const post = await this.postModel.findOne({_id: new ObjectId(id)});
+        const post = await this.postModel.findOne({_id: new ObjectId(id)}, {id: 0, userId: 0, __v: 0});
         return post;
     }
 

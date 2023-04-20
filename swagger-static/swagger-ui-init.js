@@ -1052,7 +1052,40 @@ window.onload = function() {
           },
           "responses": {
             "200": {
-              "description": "User's post was created"
+              "description": "User's post was created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "PostSchemaViewModel",
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "644029f428ab014211e95c4b"
+                      },
+                      "content": {
+                        "type": "string",
+                        "example": "post's content"
+                      },
+                      "userName": {
+                        "type": "string",
+                        "example": "powerMan"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2023-04-19T17:50:44.599Z"
+                      },
+                      "photo": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": "https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             },
             "400": {
               "description": "Incorrect field(s) in request body",
@@ -1109,7 +1142,42 @@ window.onload = function() {
           "parameters": [],
           "responses": {
             "200": {
-              "description": "Posts was recieved"
+              "description": "Posts was recieved",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "644029f428ab014211e95c4b"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "post's content"
+                        },
+                        "userName": {
+                          "type": "string",
+                          "example": "powerMan"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2023-04-19T17:50:44.599Z"
+                        },
+                        "photo": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           "tags": [
@@ -1133,7 +1201,40 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "Post was recieved"
+              "description": "Post was recieved",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "PostSchemaViewModel",
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "644029f428ab014211e95c4b"
+                      },
+                      "content": {
+                        "type": "string",
+                        "example": "post's content"
+                      },
+                      "userName": {
+                        "type": "string",
+                        "example": "powerMan"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2023-04-19T17:50:44.599Z"
+                      },
+                      "photo": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": "https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             },
             "404": {
               "description": "Post was not found"

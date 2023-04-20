@@ -1,12 +1,75 @@
 import {errorSchemaFactory} from "../../profile/api/profile.swagger.info";
 import {resStatus429} from "../../auth/api/auth.swagger.info";
 
+const PostSchemaViewModel = {
+    title: 'PostSchemaViewModel',
+    type: 'object',
+    properties: {
+        _id: {
+            type: 'string',
+            example: '644029f428ab014211e95c4b',
+        },
+        content: {
+            type: 'string',
+            example: 'post\'s content',
+        },
+        userName: {
+            type: 'string',
+            example: 'powerMan',
+        },
+        createdAt: {
+            type: 'string',
+            example: '2023-04-19T17:50:44.599Z'
+        },
+        photo: {
+            type: 'array',
+            items: {
+                type: 'string',
+                example: 'https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`'
+            }
+        },
+    }
+};
+
+const PostsSchemaViewModel = {
+    type: 'array',
+    items: {
+        type: 'object',
+        properties: {
+            _id: {
+                type: 'string',
+                example: '644029f428ab014211e95c4b',
+            },
+            content: {
+                type: 'string',
+                example: 'post\'s content',
+            },
+            userName: {
+                type: 'string',
+                example: 'powerMan',
+            },
+            createdAt: {
+                type: 'string',
+                example: '2023-04-19T17:50:44.599Z'
+            },
+            photo: {
+                type: 'array',
+                items: {
+                    type: 'string',
+                    example: 'https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`'
+                }
+            },
+        }
+    }
+}
+
 
 export const sw_createPost = {
     summary: {summary: 'User can add Post. User should have access token'},
     status200: {
         status: 200,
         description: "User's post was created",
+        schema: PostSchemaViewModel
     },
     status400: {
         status: 400,
@@ -40,6 +103,7 @@ export const sw_getPosts = {
     status200: {
         status: 200,
         description: "Posts was recieved",
+        schema: PostsSchemaViewModel
     },
 };
 
@@ -48,6 +112,7 @@ export const sw_getPostById = {
     status200: {
         status: 200,
         description: "Post was recieved",
+        schema: PostSchemaViewModel
     },
     status404: {
         status: 404,
