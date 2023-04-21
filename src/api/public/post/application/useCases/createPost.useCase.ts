@@ -22,7 +22,6 @@ export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
             id: new Date().valueOf().toString(),
             photo: [],
             userId: command.user.accountData.id,
-            userName: command.user.profileInfo.userName,
             createdAt: new Date(),
             content: command.inputModel.content,
         };
@@ -38,7 +37,7 @@ export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
             newPost.photo.push(`https://storage.yandexcloud.net/${bucketParam.Bucket}/inctagram-backet/${bucketParam.Key}`);
         }
         const postId = await this.postRepository.createPost(newPost);
-        const post = await this.postRepository.getPostById(postId.toString());
+        const post = await this.postRepository.getPostById(postId);
         return post;
     }
 }

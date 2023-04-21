@@ -13,11 +13,15 @@ export class DeletePostCommand {
 
 @CommandHandler(DeletePostCommand)
 export class DeletePostUseCase implements ICommandHandler<DeletePostCommand> {
-    constructor(protected postRepository: PostRepository, protected postQueryRepository: PostQueryService, protected fileStorageAdapter: FileStorageAdapter) {
+    constructor(
+        protected postRepository: PostRepository,
+        protected postQueryRepository: PostQueryService,
+        protected fileStorageAdapter: FileStorageAdapter) {
     }
 
     async execute(command: DeletePostCommand) {
         const findPostById = await this.postQueryRepository.getPostById(command.postId);
+        console.log(findPostById)
         if (!findPostById) throw new NotFoundException();
         if (findPostById.userId != command.userId) {
             throw new UnauthorizedException();

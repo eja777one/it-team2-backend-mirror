@@ -2,7 +2,26 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 import {Post, PostDocument} from '../application/entities/post.schema';
-import {ObjectId} from 'bson';
+
+const postsAndUsersLookup = {
+    from: 'users',
+    localField: 'userId',
+    foreignField: 'accountData.id',
+    pipeline: [{$project: {_id: 0, "profileInfo.userName": 1}}],
+    as: 'userName',
+};
+
+const postsProjection = {
+    _id: 0,
+    id: 1,
+    content: 1,
+    userId: 1,
+    userName: {
+        $arrayElemAt: ["$userName.profileInfo.userName", 0]
+    },
+    createdAt: 1,
+    photo: 1,
+};
 
 @Injectable()
 export class PostRepository {
@@ -11,19 +30,28 @@ export class PostRepository {
 
     async createPost(newPost: { id: string; userId: string; content: string }) {
         const post = await this.postModel.create(newPost);
-        return post._id;
+        return post.id;
     }
 
     async getAllPosts() {
-        return this.postModel.find({}, {id: 0, userId: 0, __v: 0}).sort({createdAt: -1});
+        const posts = await this.postModel.aggregate([
+            {$lookup: postsAndUsersLookup},
+            {$sort: {createdAt: -1}},
+            {$project: postsProjection}
+        ]);
+        return posts
     }
 
     async getPostById(id: string) {
-        const post = await this.postModel.findOne({_id: new ObjectId(id)}, {id: 0, userId: 0, __v: 0});
-        return post;
+        const post = await this.postModel.aggregate([
+            {$match: {id}},
+            {$lookup: postsAndUsersLookup},
+            {$project: postsProjection}
+        ])
+        return post ? post[0] : null;
     }
 
     async deletePost(postId: string) {
-        return await this.postModel.deleteOne({_id: new ObjectId(postId)});
+        return await this.postModel.deleteOne({id: postId});
     }
 }

@@ -12,8 +12,6 @@ export class Post {
     @Prop()
     userId: string;
     @Prop()
-    userName: string;
-    @Prop()
     createdAt: Date;
     @Prop()
     photo: [];

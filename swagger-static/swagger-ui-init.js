@@ -1059,13 +1059,17 @@ window.onload = function() {
                     "title": "PostSchemaViewModel",
                     "type": "object",
                     "properties": {
-                      "_id": {
+                      "id": {
                         "type": "string",
-                        "example": "644029f428ab014211e95c4b"
+                        "example": "1682051309599"
                       },
                       "content": {
                         "type": "string",
                         "example": "post's content"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "example": "1682051375718"
                       },
                       "userName": {
                         "type": "string",
@@ -1150,9 +1154,9 @@ window.onload = function() {
                     "items": {
                       "type": "object",
                       "properties": {
-                        "_id": {
+                        "id": {
                           "type": "string",
-                          "example": "644029f428ab014211e95c4b"
+                          "example": "1682051309599"
                         },
                         "content": {
                           "type": "string",
@@ -1161,6 +1165,10 @@ window.onload = function() {
                         "userName": {
                           "type": "string",
                           "example": "powerMan"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "1682051375718"
                         },
                         "createdAt": {
                           "type": "string",
@@ -1208,13 +1216,17 @@ window.onload = function() {
                     "title": "PostSchemaViewModel",
                     "type": "object",
                     "properties": {
-                      "_id": {
+                      "id": {
                         "type": "string",
-                        "example": "644029f428ab014211e95c4b"
+                        "example": "1682051309599"
                       },
                       "content": {
                         "type": "string",
                         "example": "post's content"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "example": "1682051375718"
                       },
                       "userName": {
                         "type": "string",
@@ -1247,7 +1259,16 @@ window.onload = function() {
         "delete": {
           "operationId": "PostController_deletePost",
           "summary": "User can delete own Post by id",
-          "parameters": [],
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
           "responses": {
             "204": {
               "description": "Post was deleted"

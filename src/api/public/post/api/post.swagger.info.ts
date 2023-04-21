@@ -5,13 +5,17 @@ const PostSchemaViewModel = {
     title: 'PostSchemaViewModel',
     type: 'object',
     properties: {
-        _id: {
+        id: {
             type: 'string',
-            example: '644029f428ab014211e95c4b',
+            example: '1682051309599',
         },
         content: {
             type: 'string',
             example: 'post\'s content',
+        },
+        userId: {
+            type: 'string',
+            example: '1682051375718',
         },
         userName: {
             type: 'string',
@@ -36,9 +40,9 @@ const PostsSchemaViewModel = {
     items: {
         type: 'object',
         properties: {
-            _id: {
+            id: {
                 type: 'string',
-                example: '644029f428ab014211e95c4b',
+                example: '1682051309599',
             },
             content: {
                 type: 'string',
@@ -47,6 +51,10 @@ const PostsSchemaViewModel = {
             userName: {
                 type: 'string',
                 example: 'powerMan',
+            },
+            userId: {
+                type: 'string',
+                example: '1682051375718',
             },
             createdAt: {
                 type: 'string',

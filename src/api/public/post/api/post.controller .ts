@@ -67,7 +67,7 @@ export class PostController {
     @ApiResponse(sw_deletePost.status204)
     @ApiResponse(sw_deletePost.status401)
     @ApiResponse(sw_deletePost.status404)
-    async deletePost(@Param('id') id, @UserDecorator() user: User) {
+    async deletePost(@Param('id') id: string, @UserDecorator() user: User) {
         return await this.commandBus.execute(new DeletePostCommand(user.accountData.id, id));
     }
 }
