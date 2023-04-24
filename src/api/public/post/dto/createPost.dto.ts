@@ -5,6 +5,6 @@ class Photo {
     name: string;
 }
 export class CreatePostInputModel {
-    @Length(4, 500)
+    @Length(0, 500)
     content: string;
 }
