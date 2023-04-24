@@ -5,7 +5,7 @@ import {
     Get,
     HttpCode, HttpStatus,
     Param,
-    Post,
+    Post, Put,
     UploadedFiles,
     UseGuards,
     UseInterceptors
@@ -21,7 +21,8 @@ import {FilesInterceptor} from '@nestjs/platform-express';
 import {PostQueryService} from '../application/post.query.service';
 import {DeletePostCommand} from '../application/useCases/deletePost.useCase';
 import {ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {sw_createPost, sw_deletePost, sw_getPostById, sw_getPosts} from "./post.swagger.info";
+import {sw_createPost, sw_deletePost, sw_getPostById, sw_getPosts, sw_updatePost} from "./post.swagger.info";
+import {UpdatePostCommand} from "../application/useCases/updatePost.useCase";
 
 @ApiTags('Posts')
 @Controller('post')
@@ -42,6 +43,20 @@ export class PostController {
     async createPost(@UploadedFiles() files: Array<Express.Multer.File>,
                      @UserDecorator() user: User, @Body() inputModel: CreatePostInputModel) {
         return await this.commandBus.execute(new CreatePostCommand(user, inputModel, files));
+    }
+
+    @ApiBearerAuth()
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @UseGuards(BearerAuthGuard)
+    @Put(':id')
+    @ApiOperation(sw_updatePost.summary)
+    @ApiBody(sw_updatePost.inputSchema)
+    @ApiResponse(sw_updatePost.status204)
+    @ApiResponse(sw_updatePost.status401)
+    @ApiResponse(sw_updatePost.status404)
+    async updatePost(@Param('id') id: string, @UserDecorator() user: User,
+                     @Body() inputModel: CreatePostInputModel) {
+        return await this.commandBus.execute(new UpdatePostCommand(user.accountData.id, id, inputModel));
     }
 
     @Get('allPosts')

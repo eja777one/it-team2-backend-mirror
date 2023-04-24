@@ -99,7 +99,7 @@ export const sw_createPost = {
                     example: 'Hello! It is my first post $)',
                     description: 'it should be valid content',
                     minLength: 4,
-                    maxLength: 30,
+                    maxLength: 500,
                 }
             },
         },
@@ -141,5 +141,41 @@ export const sw_deletePost = {
     status404: {
         status: 404,
         description: "Post was not found",
+    },
+}
+
+export const sw_updatePost = {
+    summary: {summary: 'User can edit own Post by id'},
+    status204: {
+        status: 204,
+        description: "Post was updated",
+    },
+    status401: {
+        status: 401,
+        description: 'Check your cookie. Make sure that user is exist. User can edit only own posts',
+    },
+    status400: {
+        status: 400,
+        description: 'Incorrect field(s) in request body',
+        schema: errorSchemaFactory('incorrect content', 'content'),
+    },
+    status404: {
+        status: 404,
+        description: "Post was not found",
+    },
+    inputSchema: {
+        schema: {
+            title: 'UpdatePostInputModel',
+            type: 'object',
+            properties: {
+                content: {
+                    type: 'string',
+                    example: 'Updated content',
+                    description: 'it should be valid content',
+                    minLength: 4,
+                    maxLength: 500,
+                }
+            },
+        },
     },
 }

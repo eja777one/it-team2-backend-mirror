@@ -1043,7 +1043,7 @@ window.onload = function() {
                       "example": "Hello! It is my first post $)",
                       "description": "it should be valid content",
                       "minLength": 4,
-                      "maxLength": 30
+                      "maxLength": 500
                     }
                   }
                 }
@@ -1139,61 +1139,60 @@ window.onload = function() {
           ]
         }
       },
-      "/post/allPosts": {
-        "get": {
-          "operationId": "PostController_getPosts",
-          "summary": "User can get all Posts",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "Posts was recieved",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "example": "1682051309599"
-                        },
-                        "content": {
-                          "type": "string",
-                          "example": "post's content"
-                        },
-                        "userName": {
-                          "type": "string",
-                          "example": "powerMan"
-                        },
-                        "userId": {
-                          "type": "string",
-                          "example": "1682051375718"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "example": "2023-04-19T17:50:44.599Z"
-                        },
-                        "photo": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "example": "https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`"
-                          }
-                        }
-                      }
+      "/post/{id}": {
+        "put": {
+          "operationId": "PostController_updatePost",
+          "summary": "User can edit own Post by id",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "UpdatePostInputModel",
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "example": "Updated content",
+                      "description": "it should be valid content",
+                      "minLength": 4,
+                      "maxLength": 500
                     }
                   }
                 }
               }
             }
           },
+          "responses": {
+            "204": {
+              "description": "Post was updated"
+            },
+            "401": {
+              "description": "Check your cookie. Make sure that user is exist. User can edit only own posts"
+            },
+            "404": {
+              "description": "Post was not found"
+            }
+          },
           "tags": [
             "Posts"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
           ]
-        }
-      },
-      "/post/{id}": {
+        },
         "get": {
           "operationId": "PostController_getPostById",
           "summary": "User can get Post by id",
@@ -1287,6 +1286,60 @@ window.onload = function() {
             {
               "bearer": []
             }
+          ]
+        }
+      },
+      "/post/allPosts": {
+        "get": {
+          "operationId": "PostController_getPosts",
+          "summary": "User can get all Posts",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "Posts was recieved",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "1682051309599"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "post's content"
+                        },
+                        "userName": {
+                          "type": "string",
+                          "example": "powerMan"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "1682051375718"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2023-04-19T17:50:44.599Z"
+                        },
+                        "photo": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Posts"
           ]
         }
       }

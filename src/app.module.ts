@@ -51,6 +51,7 @@ import { PostController } from './api/public/post/api/post.controller ';
 import { CreatePostUseCase } from './api/public/post/application/useCases/createPost.useCase';
 import { PostQueryService } from './api/public/post/application/post.query.service';
 import { DeletePostUseCase } from './api/public/post/application/useCases/deletePost.useCase';
+import {UpdatePostUseCase} from "./api/public/post/application/useCases/updatePost.useCase";
 
 const controller = [AppController, AuthController, ProfileController, QueryProfileController, TestsController, AvatarController, PostController];
 const service = [AppService, EmailService, AuthService, QueryProfileService, JwtAdapter, JwtService, FileStorageAdapter, PostQueryService];
@@ -74,6 +75,7 @@ const useCases = [
     GetAvatarCommandUseCase,
     DeletePostUseCase,
     CreatePostUseCase,
+    UpdatePostUseCase
 ];
 const strategy = [LocalStrategy];
 

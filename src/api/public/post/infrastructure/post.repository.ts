@@ -33,6 +33,11 @@ export class PostRepository {
         return post.id;
     }
 
+    async updatePost(id: string, content: string) {
+        const updatedPost = await this.postModel.updateOne({id}, {$set: {content}});
+        return updatedPost.matchedCount === 1;
+    }
+
     async getAllPosts() {
         const posts = await this.postModel.aggregate([
             {$lookup: postsAndUsersLookup},
