@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreatePostCommand } from '../application/useCases/createPost.useCase';
 import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
@@ -29,6 +29,8 @@ export class PostController {
     @ApiResponse(sw_createPost.status429)
     @UseInterceptors(FilesInterceptor('files'))
     async createPost(@UploadedFiles() files: Array<Express.Multer.File>, @UserDecorator() user: User, @Body() inputModel: CreatePostInputModel) {
+        if (files.length < 1) throw new BadRequestException([{ message: 'Zero Photo', field: 'photo' }]);
+
         return await this.commandBus.execute(new CreatePostCommand(user, inputModel, files));
     }
 
