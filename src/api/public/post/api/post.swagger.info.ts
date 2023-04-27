@@ -1,5 +1,5 @@
-import {errorSchemaFactory} from "../../profile/api/profile.swagger.info";
-import {resStatus429} from "../../auth/api/auth.swagger.info";
+import { errorSchemaFactory } from '../../profile/api/profile.swagger.info';
+import { resStatus429 } from '../../auth/api/auth.swagger.info';
 
 const PostSchemaViewModel = {
     title: 'PostSchemaViewModel',
@@ -11,7 +11,7 @@ const PostSchemaViewModel = {
         },
         content: {
             type: 'string',
-            example: 'post\'s content',
+            example: "post's content",
         },
         userId: {
             type: 'string',
@@ -23,16 +23,16 @@ const PostSchemaViewModel = {
         },
         createdAt: {
             type: 'string',
-            example: '2023-04-19T17:50:44.599Z'
+            example: '2023-04-19T17:50:44.599Z',
         },
         photo: {
             type: 'array',
             items: {
                 type: 'string',
-                example: 'https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`'
-            }
+                example: 'https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`',
+            },
         },
-    }
+    },
 };
 
 const PostsSchemaViewModel = {
@@ -46,7 +46,7 @@ const PostsSchemaViewModel = {
             },
             content: {
                 type: 'string',
-                example: 'post\'s content',
+                example: "post's content",
             },
             userName: {
                 type: 'string',
@@ -58,26 +58,25 @@ const PostsSchemaViewModel = {
             },
             createdAt: {
                 type: 'string',
-                example: '2023-04-19T17:50:44.599Z'
+                example: '2023-04-19T17:50:44.599Z',
             },
             photo: {
                 type: 'array',
                 items: {
                     type: 'string',
-                    example: 'https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`'
-                }
+                    example: 'https://storage.yandexcloud.net/inctagram-backet/inctagram-backet/1681925863901/post/1681926398385/1post_.jpg`',
+                },
             },
-        }
-    }
-}
-
+        },
+    },
+};
 
 export const sw_createPost = {
-    summary: {summary: 'User can add Post. User should have access token'},
+    summary: { summary: 'User can add Post. User should have access token' },
     status200: {
         status: 200,
         description: "User's post was created",
-        schema: PostSchemaViewModel
+        schema: PostSchemaViewModel,
     },
     status400: {
         status: 400,
@@ -100,39 +99,39 @@ export const sw_createPost = {
                     description: 'it should be valid content',
                     minLength: 4,
                     maxLength: 500,
-                }
+                },
             },
         },
     },
 };
 
 export const sw_getPosts = {
-    summary: {summary: 'User can get all Posts'},
+    summary: { summary: 'User can get all Posts' },
     status200: {
         status: 200,
-        description: "Posts was recieved",
-        schema: PostsSchemaViewModel
+        description: 'Posts was recieved',
+        schema: PostsSchemaViewModel,
     },
 };
 
 export const sw_getPostById = {
-    summary: {summary: 'User can get Post by id'},
+    summary: { summary: 'User can get Post by id' },
     status200: {
         status: 200,
-        description: "Post was recieved",
-        schema: PostSchemaViewModel
+        description: 'Post was recieved',
+        schema: PostSchemaViewModel,
     },
     status404: {
         status: 404,
-        description: "Post was not found",
+        description: 'Post was not found',
     },
 };
 
 export const sw_deletePost = {
-    summary: {summary: 'User can delete own Post by id'},
+    summary: { summary: 'User can delete own Post by id' },
     status204: {
         status: 204,
-        description: "Post was deleted",
+        description: 'Post was deleted',
     },
     status401: {
         status: 401,
@@ -140,15 +139,15 @@ export const sw_deletePost = {
     },
     status404: {
         status: 404,
-        description: "Post was not found",
+        description: 'Post was not found',
     },
-}
+};
 
 export const sw_updatePost = {
-    summary: {summary: 'User can edit own Post by id'},
+    summary: { summary: 'User can edit own Post by id' },
     status204: {
         status: 204,
-        description: "Post was updated",
+        description: 'Post was updated',
     },
     status401: {
         status: 401,
@@ -161,7 +160,7 @@ export const sw_updatePost = {
     },
     status404: {
         status: 404,
-        description: "Post was not found",
+        description: 'Post was not found',
     },
     inputSchema: {
         schema: {
@@ -174,8 +173,8 @@ export const sw_updatePost = {
                     description: 'it should be valid content',
                     minLength: 4,
                     maxLength: 500,
-                }
+                },
             },
         },
     },
-}
+};

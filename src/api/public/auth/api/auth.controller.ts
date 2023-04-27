@@ -37,6 +37,7 @@ import { NewPasswordCommand } from '../application/useCases/newPassword.useCase'
 import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
 import { User } from '../../../../bd/user/entities/user.schema';
 import { UserDecorator } from '../../../../common/decorators/user.decorator';
+import { RecaptchaGuard } from '../../../../common/guard/recaptcha.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -132,7 +133,7 @@ export class AuthController {
         return { accessToken: accessToken };
     }
 
-    @UseGuards(ThrottlerGuard)
+    @UseGuards(ThrottlerGuard, RecaptchaGuard)
     @HttpCode(HttpStatus.NO_CONTENT)
     @Post('password-recovery-code')
     @ApiOperation(sw_passwordRecoveryCode.summary)
@@ -140,8 +141,10 @@ export class AuthController {
     @ApiResponse(sw_passwordRecoveryCode.status204)
     @ApiResponse(sw_passwordRecoveryCode.status400)
     @ApiResponse(sw_passwordRecoveryCode.status429)
-    async passwordRecoveryCode(@Body() inputModel: PasswordRecoveryInputModelType) {
-        await this.commandBus.execute(new PasswordRecoveryCodeCommand(inputModel));
+    async passwordRecoveryCode(@Body() inputModel: PasswordRecoveryInputModelType, @Body() body: string) {
+        if (recaptchaAdapter.isValid(body)) {
+            await this.commandBus.execute(new PasswordRecoveryCodeCommand(inputModel));
+        }
         return;
     }
 
@@ -171,3 +174,9 @@ export class AuthController {
         return;
     }
 }
+
+const recaptchaAdapter = {
+    isValid(value) {
+        return true;
+    },
+};

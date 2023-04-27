@@ -1,23 +1,19 @@
-import {CommandHandler, ICommandHandler} from '@nestjs/cqrs';
-import {User} from '../../../../../bd/user/entities/user.schema';
-import {CreatePostInputModel} from '../../dto/createPost.dto';
-import {PostRepository} from '../../infrastructure/post.repository';
-import {FileStorageAdapter} from '../../../../../common/adapter/fileStorageAdapterService';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { User } from '../../../../../bd/user/entities/user.schema';
+import { CreatePostInputModel } from '../../dto/createPost.dto';
+import { PostRepository } from '../../infrastructure/post.repository';
+import { FileStorageAdapter } from '../../../../../common/adapter/fileStorageAdapterService';
 
 export class CreatePostCommand {
-    constructor(public user: User, public inputModel: CreatePostInputModel, public files: any) {
-    }
+    constructor(public user: User, public inputModel: CreatePostInputModel, public files: any) {}
 }
 
 @CommandHandler(CreatePostCommand)
 export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
-    constructor(
-        protected postRepository: PostRepository,
-        protected fileStorageAdapter: FileStorageAdapter) {
-    }
+    constructor(protected postRepository: PostRepository, protected fileStorageAdapter: FileStorageAdapter) {}
 
     async execute(command: CreatePostCommand) {
-        console.log(command.user)
+        console.log(command.user);
         const newPost = {
             id: new Date().valueOf().toString(),
             photo: [],

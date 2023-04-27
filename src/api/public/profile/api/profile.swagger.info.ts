@@ -65,7 +65,7 @@ const profileSchema = {
 };
 
 export const sw_addProfile = {
-    summary: {summary: 'User can add profile. User should have access token'},
+    summary: { summary: 'User can add profile. User should have access token' },
     inputSchema: {
         schema: {
             title: 'AddProfileInputModel',
@@ -89,7 +89,7 @@ export const sw_addProfile = {
 };
 
 export const sw_getProfile = {
-    summary: {summary: 'User can get own profile'},
+    summary: { summary: 'User can get own profile' },
     status200: {
         status: 200,
         description: 'Profile was sent to user',
@@ -115,7 +115,7 @@ export const sw_getProfile = {
 };
 
 export const sw_updateProfile = {
-    summary: {summary: 'User can edit own profile. User should have access token'},
+    summary: { summary: 'User can edit own profile. User should have access token' },
     inputSchema: {
         schema: {
             title: 'UpdateProfileInputModel',
@@ -139,7 +139,7 @@ export const sw_updateProfile = {
 };
 
 export const sw_getFile = {
-    summary: {summary: "Get user's avatar"},
+    summary: { summary: "Get user's avatar" },
     status200: {
         status: 200,
         description: "User's avatar was recieved",
@@ -151,7 +151,7 @@ export const sw_getFile = {
 };
 
 export const sw_uploadAvatar = {
-    summary: {summary: 'User can upload avatar. User should have access token'},
+    summary: { summary: 'User can upload avatar. User should have access token' },
     status204: {
         status: 204,
         description: "User's avatar was upload",
@@ -168,7 +168,7 @@ export const sw_uploadAvatar = {
 };
 
 export const sw_deleteAvatar = {
-    summary: {summary: 'User can delete avatar. User should have access token'},
+    summary: { summary: 'User can delete avatar. User should have access token' },
     status204: {
         status: 204,
         description: "User's avatar was deleted",

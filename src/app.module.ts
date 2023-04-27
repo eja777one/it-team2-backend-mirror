@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { HttpModule } from '@nestjs/axios';
+
 import { ThrottlerModule } from '@nestjs/throttler';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { getMailConfig } from './common/helpers/email/mail.config';
 import { User, UserSchema } from './bd/user/entities/user.schema';
 import { AppController } from './app.controller';
@@ -51,7 +52,7 @@ import { PostController } from './api/public/post/api/post.controller ';
 import { CreatePostUseCase } from './api/public/post/application/useCases/createPost.useCase';
 import { PostQueryService } from './api/public/post/application/post.query.service';
 import { DeletePostUseCase } from './api/public/post/application/useCases/deletePost.useCase';
-import {UpdatePostUseCase} from "./api/public/post/application/useCases/updatePost.useCase";
+import { UpdatePostUseCase } from './api/public/post/application/useCases/updatePost.useCase';
 
 const controller = [AppController, AuthController, ProfileController, QueryProfileController, TestsController, AvatarController, PostController];
 const service = [AppService, EmailService, AuthService, QueryProfileService, JwtAdapter, JwtService, FileStorageAdapter, PostQueryService];
@@ -75,12 +76,13 @@ const useCases = [
     GetAvatarCommandUseCase,
     DeletePostUseCase,
     CreatePostUseCase,
-    UpdatePostUseCase
+    UpdatePostUseCase,
 ];
 const strategy = [LocalStrategy];
 
 @Module({
     imports: [
+        HttpModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'swagger-static'),
             serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger',

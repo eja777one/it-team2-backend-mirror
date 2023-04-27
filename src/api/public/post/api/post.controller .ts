@@ -1,34 +1,22 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpCode, HttpStatus,
-    Param,
-    Post, Put,
-    UploadedFiles,
-    UseGuards,
-    UseInterceptors
-} from '@nestjs/common';
-import {CommandBus} from '@nestjs/cqrs';
-import {CreatePostCommand} from '../application/useCases/createPost.useCase';
-import {BearerAuthGuard} from '../../../../common/guard/bearerAuth.guard';
-import {UserDecorator} from '../../../../common/decorators/user.decorator';
-import {User} from '../../../../bd/user/entities/user.schema';
-import {ThrottlerGuard} from '@nestjs/throttler';
-import {CreatePostInputModel} from '../dto/createPost.dto';
-import {FilesInterceptor} from '@nestjs/platform-express';
-import {PostQueryService} from '../application/post.query.service';
-import {DeletePostCommand} from '../application/useCases/deletePost.useCase';
-import {ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {sw_createPost, sw_deletePost, sw_getPostById, sw_getPosts, sw_updatePost} from "./post.swagger.info";
-import {UpdatePostCommand} from "../application/useCases/updatePost.useCase";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreatePostCommand } from '../application/useCases/createPost.useCase';
+import { BearerAuthGuard } from '../../../../common/guard/bearerAuth.guard';
+import { UserDecorator } from '../../../../common/decorators/user.decorator';
+import { User } from '../../../../bd/user/entities/user.schema';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { CreatePostInputModel } from '../dto/createPost.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { PostQueryService } from '../application/post.query.service';
+import { DeletePostCommand } from '../application/useCases/deletePost.useCase';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { sw_createPost, sw_deletePost, sw_getPostById, sw_getPosts, sw_updatePost } from './post.swagger.info';
+import { UpdatePostCommand } from '../application/useCases/updatePost.useCase';
 
 @ApiTags('Posts')
 @Controller('post')
 export class PostController {
-    constructor(private commandBus: CommandBus, private postQueryService: PostQueryService) {
-    }
+    constructor(private commandBus: CommandBus, private postQueryService: PostQueryService) {}
 
     @ApiBearerAuth()
     @UseGuards(BearerAuthGuard, ThrottlerGuard)
@@ -40,8 +28,7 @@ export class PostController {
     @ApiResponse(sw_createPost.status401)
     @ApiResponse(sw_createPost.status429)
     @UseInterceptors(FilesInterceptor('files'))
-    async createPost(@UploadedFiles() files: Array<Express.Multer.File>,
-                     @UserDecorator() user: User, @Body() inputModel: CreatePostInputModel) {
+    async createPost(@UploadedFiles() files: Array<Express.Multer.File>, @UserDecorator() user: User, @Body() inputModel: CreatePostInputModel) {
         return await this.commandBus.execute(new CreatePostCommand(user, inputModel, files));
     }
 
@@ -54,8 +41,7 @@ export class PostController {
     @ApiResponse(sw_updatePost.status204)
     @ApiResponse(sw_updatePost.status401)
     @ApiResponse(sw_updatePost.status404)
-    async updatePost(@Param('id') id: string, @UserDecorator() user: User,
-                     @Body() inputModel: CreatePostInputModel) {
+    async updatePost(@Param('id') id: string, @UserDecorator() user: User, @Body() inputModel: CreatePostInputModel) {
         return await this.commandBus.execute(new UpdatePostCommand(user.accountData.id, id, inputModel));
     }
 
